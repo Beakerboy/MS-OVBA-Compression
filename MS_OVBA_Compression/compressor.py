@@ -48,7 +48,7 @@ class Compressor:
             chunkSize = 4096
             compressedChunk = data.ljust(4096, '\0')
             compressAndSig = 0x3000
-        header = compressAndSig & chunkSize
+        header = compressAndSig | chunkSize
         compressedChunk = header.to_bytes(2, self.endian) + compressedChunk
         return compressedChunk
 
