@@ -39,7 +39,7 @@ packCopyTokenData = [
     ([3, 8, 9], b'\x70\x00'),
 ]
 
-@pytest.mark.paramatrize("inputs, expected", packCopyTokenData)
+@pytest.mark.parametrize("inputs, expected", packCopyTokenData)
 def test_packCopyToken(inputs, expected):
     comp = Compressor()
     help = comp.copytokenHelp(inputs[3])
