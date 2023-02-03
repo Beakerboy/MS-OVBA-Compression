@@ -42,10 +42,11 @@ def test_copytokenHelp(input, expected):
 
 unpackCopyTokenData = [
     ([9, 0x7000], [3, 8]),
+    ([54, 0x3C00], [52, 54]),
 ]
 
 @pytest.mark.parametrize("inputs, expected", unpackCopyTokenData)
-def test_packCopyToken(inputs, expected):
+def test_unpackCopyToken(inputs, expected):
     help = copytokenHelp(inputs[0])
     result = unpackCopyToken(inputs[1], help)
     assert result["length"] == expected[0]
