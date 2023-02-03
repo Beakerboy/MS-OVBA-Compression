@@ -88,7 +88,7 @@ class Compressor:
             tokenFlag = 1
         else:
             tokenFlag = 0
-            token = uncompressedData[0]
+            token = bytes(uncompressedData[0])
             uncompressedData = uncompressedData[1:]
         return uncompressedData, token, tokenFlag
 
