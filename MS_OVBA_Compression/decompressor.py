@@ -28,6 +28,7 @@ class Decompressor:
             compressedChunk = chunks[2:compressedDataLength + 2]
             chunks = chunks[length + 2:]
             self.uncompressedData += self.decompressChunk(compressedChunk)
+            # if there are more chunks, this chunk must be 4096 bytes uncompressed
 
     def unpackHeader(self, header):
         length = len(compressedHeader)
