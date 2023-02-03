@@ -13,7 +13,7 @@ def copytokenHelp(difference):
         "maxLength": maxLength
     }
 
- def unpackCopytoken(copyToken, help):
+def unpackCopytoken(copyToken, help):
     """
     calculate an offset and length from a 16 bit copytoken
     """
