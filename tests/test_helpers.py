@@ -18,6 +18,9 @@ packCopyTokenData = [
     ([3, 8, 9], 0x7000),
     ([4, 8, 17], 0x3801),
     ([3, 7, 24], 0x3000),
+    ([5, 15, 33], 0x7002),
+    ([7, 5, 38], 0x1004),
+    ([3, 52, 54], 0x3C00),
 ]
 
 @pytest.mark.parametrize("inputs, expected", packCopyTokenData)
