@@ -13,6 +13,19 @@ def copytokenHelp(difference):
         "maxLength": maxLength
     }
 
+ def unpackCopytoken(copyToken, help):
+    """
+    calculate an offset and length from a 16 bit copytoken
+    """
+    length = (copyToken & help["lengthMask"]) + 3
+    temp1 = copyToken & help["offsetMask"]
+    temp2 = 16 - help["bitCount"]
+    offset = (temp1 >> temp2) + 1
+    return {
+        "length": length,
+        "offset": offset
+    }
+
 def packCopyToken(length, offset, help):
     """
     Create the copy token from the length, offset, and currect position
