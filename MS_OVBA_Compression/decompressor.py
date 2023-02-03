@@ -26,6 +26,7 @@ class Decompressor:
     def setCompressedHeader(self, compressedHeader):
         """
         The compressed header is two bytes. 12 signature byes followed by \011 and a single bit that is 0b1 if compressed
+        The documentation differs from real-world MS implementation. It's possible that enian-ness affects the packing order of these bits.
         """
         length = len(compressedHeader)
         if length != 2:
