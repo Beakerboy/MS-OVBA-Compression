@@ -69,7 +69,13 @@ def test_decompressUnableToCompressOneToken1():
     expected = bytearray("abcdefghijklmnopqrstuv.", "ascii")
     assert expected == result
 
-def test_smallHeader():
+badHeaderData = [
+    (b'\x07'),
+    (b'\x07\xC4\x24'),
+]
+
+@pytest.mark.parametrize("input", badHeaderData)
+def test_badHeader(input):
     comp = Decompressor()
     with pytest.raises(Exception) as e_info:
-        comp.setCompressedHeader(b'\x07')
+        comp.setCompressedHeader(input)
