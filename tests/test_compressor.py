@@ -38,7 +38,10 @@ def test_longPoorCompression():
 matchingData = [
     (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 8]),
     (b'aaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [4, 8]),
-    (b'aaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 7])
+    (b'aaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 5]),
+    (b'aaaaaaaaaaaarstuvwxyzaaa', [5, 15]),
+    (b'aaaaaaarstuvwxyzaaa', [7, 1]),
+    (b'aaa', [3, 12]),
 ]
 
 @pytest.mark.parametrize("input, expected", matchingData) 
