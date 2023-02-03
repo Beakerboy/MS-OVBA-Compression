@@ -35,10 +35,16 @@ def test_longPoorCompression():
     """
     pass
 
+matchingData = [
+    (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 8]),
+    (b'aaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [4, 8]),
+    (b'aaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 7])
+]
+
+@pytest.mark.parametrize("input, expected", matchingData) 
 def test_matching():
     comp = Compressor()
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-    uncompressed = b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-    offset, length =  comp.matching(uncompressed)
-    assert length == 3
-    assert offset == 8
+    offset, length =  comp.matching(input)
+    assert length == expected[0]
+    assert offset == expected[1]
