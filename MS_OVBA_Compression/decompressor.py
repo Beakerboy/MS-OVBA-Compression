@@ -16,7 +16,7 @@ class Decompressor:
         self.compressed = 1
 
     def decompress(self, compressedContainer):
-        if compressedContainer[0] != 0x01':
+        if compressedContainer[0] != 0x01:
             raise Exception("The container signature byte must be \\x01.")
         chunks = compressedContainer[1:]
         while len(chunks) > 0:
