@@ -84,13 +84,14 @@ class Compressor:
         if offset > 0:
             difference =  len(self.activeChunk) - len(uncompressedData)
             help = copyTokenHelp(difference)
+            # Can int.to_bytes() be used here instead?
             token = struct.pack("<H", packCopyToken(length, offset, help))
 
             uncompressedData = uncompressedData[length:]
             tokenFlag = 1
         else:
             tokenFlag = 0
-            token = uncompressedData[0].to_bytes(1)
+            token = uncompressedData[0].to_bytes(1, "little")
             uncompressedData = uncompressedData[1:]
         return uncompressedData, token, tokenFlag
 
