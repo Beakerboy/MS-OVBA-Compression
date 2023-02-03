@@ -20,5 +20,5 @@ packCopyTokenData = [
 
 @pytest.mark.parametrize("inputs, expected", packCopyTokenData)
 def test_packCopyToken(inputs, expected):
-    help = copytokenHelp(inputs[3])
+    help = copytokenHelp(inputs[2])
     assert packCopyToken(inputs[0] ,inputs[1], help) == expected
