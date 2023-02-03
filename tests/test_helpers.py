@@ -39,3 +39,14 @@ def test_copytokenHelp(input, expected):
     assert result["bitCount"] == expected[0]
     assert result["lengthMask"] == expected[1]
     assert result["offsetMask"] == expected[2]
+
+unpackCopyTokenData = [
+    ([9, 0x7000], [3, 8]),
+]
+
+@pytest.mark.parametrize("inputs, expected", unpackCopyTokenData)
+def test_packCopyToken(inputs, expected):
+    help = copytokenHelp(inputs[0])
+    result = unpackCopyToken(inputs[1], help)
+    assert result["length"] == expected[0]
+    assert result["offset"] == expected[1]
