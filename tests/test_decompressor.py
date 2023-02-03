@@ -77,3 +77,9 @@ def test_longRawChunk():
     del compressed[:2]
     with pytest.raises(Exception) as e_info:
         comp.setCompressedHeader(header)
+
+def test_badSignature():
+    header = bytearray(b'\x12\xA3')
+    comp = Decompressor()
+    with pytest.raises(Exception) as e_info:
+        comp.setCompressedHeader(header)
