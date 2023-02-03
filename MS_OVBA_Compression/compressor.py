@@ -78,8 +78,8 @@ class Compressor:
         two bytes indicating the location and length of the replacement sequence
         the flag byte is 1 if replacement took place
         """
-	token = b''
-	tokenflag = 0
+        token = b''
+        tokenflag = 0
         offset, length = self.matching(uncompressedData)
         if offset > 0:
             difference =  len(self.activeChunk) - len(uncompressedData)
