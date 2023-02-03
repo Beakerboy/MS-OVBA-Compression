@@ -82,7 +82,7 @@ class Compressor:
         if offset > 0:
             difference =  len(self.activeChunk) - len(uncompressedStream)
             help = copyTokenHelp(differnece)
-		    token = packCopyToken(length, offset, help)
+            token = packCopyToken(length, offset, help)
 
             uncompressedData = uncompressedData[length:]
             tokenFlag = 1
