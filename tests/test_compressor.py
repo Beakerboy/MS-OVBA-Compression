@@ -43,4 +43,4 @@ def test_compressTokenSequence():
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
     uncompressedData, tokenSequence = comp.compressTokenSequence(b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa')
     assert uncompressedData == b'faaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-    assert tokenSequence = b'\x00\x61\x62\x63\x64\x65\x66\x67\x68'
+    assert tokenSequence == b'\x00\x61\x62\x63\x64\x65\x66\x67\x68'
