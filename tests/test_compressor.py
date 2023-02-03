@@ -7,6 +7,8 @@ def test_unableToCompress():
     expected = b'\x01\x19\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70\x00\x71\x72\x73\x74\x75\x76\x2E'
     assert comp.compress(input) == expected
 
+"""
+tests for private methods
 matchingData = [
     (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [0, 0]),
     (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 8]),
@@ -44,3 +46,4 @@ def test_compressTokenSequence():
     uncompressedData, tokenSequence = comp.compressTokenSequence(b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa')
     assert uncompressedData == b'faaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
     assert tokenSequence == b'\x00\x23\x61\x61\x61\x62\x63\x64\x65'
+"""
