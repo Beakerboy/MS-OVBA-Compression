@@ -1,4 +1,3 @@
 pytest
 pytest-cov
 coveralls
-MS_OVBA_Compression
