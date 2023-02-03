@@ -36,22 +36,21 @@ class Compressor:
         # The docs state 12 length bits + 0b011 + compression-bit but real world little endian file has compression-bit + 0b011 + 12 length bits
         compressAndSig = 0xB000
         uncompressedData = bytearray(data)
-        chunk = b''
+        compressedChunk = b''
         i = 0
         while len(uncompressedData) > 0:
             uncompressedData, compressedTokenSequence = self.compressTokenSequence(uncompressedData)
-            chunk += compressedTokenSequence
-            i += 1
+            compressedChunk += compressedTokenSequence
 
-        chunkSize = len(chunk)
+        chunkSize = len(compressedChunk)
         # if the compression algorithm produces a chunk too large, use raw.
         if chunkSize > 4096:
             chunkSize = 4096
-            chunk = data.ljust(4096, '\0')
+            compressedChunk = data.ljust(4096, '\0')
             compressAndSig = 0x3000
         header = compressAndSig & chunkSize
-        chunk = header.to_bytes(2, self.endian) + chunk
-        return chunk
+        compressedChunk = header.to_bytes(2, self.endian) + compressedChunk
+        return compressedChunk
 
     def compressTokenSequence(self, data):
         uncompressedData = data
