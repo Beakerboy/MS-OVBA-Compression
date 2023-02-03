@@ -90,7 +90,7 @@ class Compressor:
             tokenFlag = 1
         else:
             tokenFlag = 0
-            token = bytes(uncompressedData[0])
+            token = uncompressedData[0].to_bytes()
             uncompressedData = uncompressedData[1:]
         return uncompressedData, token, tokenFlag
 
