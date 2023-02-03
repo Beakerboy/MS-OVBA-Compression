@@ -1,4 +1,4 @@
-def copytokenHelp(difference):
+def copyTokenHelp(difference):
     """
     Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
     """
