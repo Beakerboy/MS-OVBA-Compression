@@ -61,5 +61,6 @@ def test_compressToken(input, expected):
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
     uncompressed, token, flag = comp.compressToken(input)
     assert uncompressed == expected[0]
-    assert token == expected[1]
     assert flag == expected[2]
+    assert token == expected[1]
+
