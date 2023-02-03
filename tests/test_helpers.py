@@ -1,5 +1,5 @@
 import pytest
-import MS_OVBA_Compression.helpers
+from MS_OVBA_Compression.helpers import *
 
 ceilLog2Data = [
     (1, 4),
@@ -12,4 +12,4 @@ ceilLog2Data = [
 ]
 @pytest.mark.paramatrize("input, expected", ceilLog2Data)
 def test_cielLog2(input, expected):
-    assert helpers.ceilLog2(input) == expected
+    assert ceilLog2(input) == expected
