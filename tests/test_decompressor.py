@@ -66,19 +66,27 @@ badHeaderData = [
 
 @pytest.mark.parametrize("input", badHeaderData)
 def test_badHeader(input):
+    """
+    The header must only be two bytes in length
+    """
     comp = Decompressor()
     with pytest.raises(Exception) as e_info:
         comp.setCompressedHeader(input)
 
 def test_longRawChunk():
-    compressed = bytearray(b'\xFE\x3F' + b'\x00' * 4095)
+    """
+    If the chuck is raw (a 3 in the third nibble), it must be 4096 bytes in length.
+    """
+    header = bytearray(b'\xFE\x3F')
     comp = Decompressor()
-    header = bytearray(compressed[:2])
-    del compressed[:2]
     with pytest.raises(Exception) as e_info:
         comp.setCompressedHeader(header)
 
 def test_badSignature():
+    """
+    The signature is part of the third nibble in a little-endian header. It must be either B or 3 if the data is compressed or raw respectively.
+    Should we test big endian packing?
+    """
     header = bytearray(b'\x12\xA3')
     comp = Decompressor()
     with pytest.raises(Exception) as e_info:
