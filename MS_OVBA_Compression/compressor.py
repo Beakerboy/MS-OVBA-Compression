@@ -65,9 +65,9 @@ class Compressor:
         for i in range(8):
             if len(uncompressedData) > 0:
                 token = b''
-                uncompressedData, token, flag = self.compressToken(uncompressedData)
+                uncompressedData, packedToken, flag = self.compressToken(uncompressedData)
                 tokenFlag = (flag << i) | tokenFlag
-                tokens += token
+                tokens += packedToken
         tokenSequence = bytes(tokenFlag) + tokens
         return uncompressedData, tokenSequence
 
@@ -78,21 +78,21 @@ class Compressor:
         two bytes indicating the location and length of the replacement sequence
         the flag byte is 1 if replacement took place
         """
-        token = b''
+        packedToken = b''
         tokenflag = 0
         offset, length = self.matching(uncompressedData)
         if offset > 0:
             difference =  len(self.activeChunk) - len(uncompressedData)
             help = copyTokenHelp(difference)
-            token = packCopyToken(length, offset, help).to_bytes(2, "little")
+            packedToken = packCopyToken(length, offset, help).to_bytes(2, "little")
 
             uncompressedData = uncompressedData[length:]
             tokenFlag = 1
         else:
             tokenFlag = 0
-            token = uncompressedData[0].to_bytes(1, "little")
+            packedToken = uncompressedData[0].to_bytes(1, "little")
             uncompressedData = uncompressedData[1:]
-        return uncompressedData, token, tokenFlag
+        return uncompressedData, packedToken, tokenFlag
 
     def matching(self, uncompressedStream):
         """
