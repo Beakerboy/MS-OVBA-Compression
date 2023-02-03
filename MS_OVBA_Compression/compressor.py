@@ -1,4 +1,6 @@
 import struct
+from MS_OVBA_Compression.helpers import *
+
 class Compressor:
     def __init__(self, endian='little'):
         self.endian = endian
@@ -76,18 +78,23 @@ class Compressor:
         two bytes indicating the location and length of the replacement sequence
         the flag byte is 1 if replacement took place
         """
-        token, length = self.matching(uncompressedData)
-        if len(token) == 1:
-            uncompressedData = uncompressedData[1:]
-            tokenFlag = 0
-        else:
-            tokenFlag = 1
+        offset, length = self.matching(uncompressedData)
+        if offset > 0:
+            difference =  len(self.activeChunk) - len(uncompressedStream)
+            help = copyTokenHelp(difference)
+            token = struct.pack("<H", packCopyToken(length, offset, help))
+
             uncompressedData = uncompressedData[length:]
+            tokenFlag = 1
+        else:
+            tokenFlag = 0
+            token = uncompressedData[0]
+            uncompressedData = uncompressedData[1:]
         return uncompressedData, token, tokenFlag
 
     def matching(self, uncompressedStream):
         """
-        Work backwards through the uncompressed data that has already been compressed to find the longest series of matching bytes
+        Work backwards through the uncompressed data that has already been compressed to find the longest series of matching bytes.
         """
         offset = 0
         length = 0
@@ -109,43 +116,9 @@ class Compressor:
             
         if bestLength >= 3:
             difference =  len(self.activeChunk) - len(uncompressedStream)
-            help = self.copytokenHelp(difference)
+            help = copytokenHelp(difference)
             maximumLength = help["maxLength"]
             length = min(maximumLength, bestLength)
             offset = len(self.activeChunk) - len(uncompressedStream) - bestCandidate
-            copyToken = self.packCopyToken(length, offset, help)
-        else:
-            copyToken = bytes(uncompressedStream[0])
-        return copyToken, length
 
-    def copytokenHelp(self, difference):
-        """
-        Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
-        """
-        bitCount = self.ceilLog2(difference)
-        lengthMask = 0xFFFF >> bitCount
-        offsetMask = ~lengthMask & 0xFFFF
-        maxLength = 0xFFFF << bitCount + 3
-        return {
-            "lengthMask": lengthMask,
-            "offsetMask": offsetMask,
-            "bitCount": bitCount,
-            "maxLength": maxLength
-        }
-
-    def packCopyToken(self, length, offset, help):
-        """
-        Create the copy token from the length, offset, and currect position
-        
-        return bytes
-        """
-        temp1 = offset - 1
-        temp2 = 16 - help["bitCount"]
-        temp3 = length - 3
-        return struct.pack("<H", (temp1 << temp2) | temp3)
-
-    def ceilLog2(self, int):
-        i = 4
-        while 2 ** i < int:
-            i += 1
-        return i
+        return offset, length

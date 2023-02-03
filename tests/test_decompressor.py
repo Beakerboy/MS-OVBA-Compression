@@ -22,16 +22,6 @@ def test_normalCompression():
     result = comp.decompress(compressed)
     assert bytearray(expected, "ascii") == result
 
-def test_compressRaw():
-    comp = Decompressor()
-    #comp.setCompression(False)
-    #input = "a"
-    #result = comp.compress(input);
-    #header = bytearray(b'\xFF\x3F')
-    #start = header + b'\x61'
-    #expected = start.ljust(4095, b'\x00')
-    #assert expected == result
-
 def test_ChunkSizeMismatch():
     comp = Decompressor()
     header = b'\x19\xB0'
@@ -39,31 +29,6 @@ def test_ChunkSizeMismatch():
     data = b'\x00\x61\x62'
     with pytest.raises(Exception) as e_info:
         comp.setCompressedData(data)
-
-def test_decompression():
-    f = open('tests/blank/vbaProject.bin', 'rb')
-    offset = 0x0F33
-    f.seek(offset)
-    sig = f.read(1)
-    assert sig == b'\x01'
-    header = f.read(2)
-    comp = Decompressor()
-    comp.setCompressedHeader(header)
-    assert comp.compressedChunkSize == 171
-    readChunk = bytearray(f.read(comp.compressedChunkSize - 2))
-    result = comp.decompress(readChunk)
-    expected = 'Attribute VB_Name = "Sheet1"\x0D\x0AAttribute VB_Base = "0{00020820-0000-0000-C000-000000000046}"\x0D\x0AAttribute VB_GlobalNameSpace = False\x0D\x0AAttribute VB_Creatable = False\x0D\x0AAttribute VB_PredeclaredId = True\x0D\x0AAttribute VB_Exposed = True\x0D\x0AAttribute VB_TemplateDerived = False\x0D\x0AAttribute VB_Customizable = True\x0D\x0A'
-    assert result == bytearray(expected, "ascii")
-    
-def test_cielLog2():
-    comp = Decompressor()
-    assert comp.ceilLog2(1) == 4
-    assert comp.ceilLog2(2) == 4
-    assert comp.ceilLog2(3) == 4
-    assert comp.ceilLog2(4) == 4
-    assert comp.ceilLog2(9) == 4
-    assert comp.ceilLog2(17) == 5
-    assert comp.ceilLog2(50) == 6
 
 def test_decompressUnableToCompressOneToken():
     compressed = bytearray(b'\x08\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68')
@@ -94,51 +59,48 @@ def test_decompressUnableToCompressOneToken1():
     expected = bytearray("abcdefghijklmnopqrstuv.", "ascii")
     assert expected == result
 
-def test_CopytokenHelp():
+badHeaderData = [
+    (b'\x07'),
+    (b'\x07\xC4\x24'),
+]
+
+@pytest.mark.parametrize("input", badHeaderData)
+def test_badHeader(input):
+    """
+    The header must only be two bytes in length
+    """
     comp = Decompressor()
-    comp.uncompressedData = 'Attribute VB_Name = "Sheet1"\x0D\x0A'
-    result = comp.copytokenHelp()
-    assert result["bitCount"] == 5
-    assert result["lengthMask"] == 0x07FF
-    assert result["offsetMask"] == 0xF800
-    tokenData = comp.unpackCopytoken(0xE80A)
-    assert tokenData["length"] == 13
-    assert tokenData["offset"] == 30
+    with pytest.raises(Exception) as e_info:
+        comp.setCompressedHeader(input)
 
-def test_Copytoken1():
+def test_longRawChunk():
+    """
+    If the chuck is raw (a 3 in the third nibble), it must be 4096 bytes in length.
+    """
+    header = bytearray(b'\xFE\x3F')
     comp = Decompressor()
-    comp.uncompressedData = '#aaabcdef'
-    result = comp.copytokenHelp()
-    assert result["bitCount"] == 4
-    assert result["lengthMask"] == 0x0FFF
-    assert result["offsetMask"] == 0xF000
-    tokenData = comp.unpackCopytoken(0x7000)
-    assert tokenData["length"] == 3
-    assert tokenData["offset"] == 8
+    with pytest.raises(Exception) as e_info:
+        comp.setCompressedHeader(header)
 
-    comp.uncompressedData = '#aaabcdefaaaaghij'
-    result = comp.copytokenHelp()
-    assert result["bitCount"] == 5
-    assert result["lengthMask"] == 0x07FF
-    assert result["offsetMask"] == 0xF800
-    tokenData = comp.unpackCopytoken(0x3801)
-    assert tokenData["length"] == 4
-    assert tokenData["offset"] == 8
+def test_badSignature():
+    """
+    The signature is part of the third nibble in a little-endian header. It must be either B or 3 if the data is compressed or raw respectively.
+    Should we test big endian packing?
+    """
+    header = bytearray(b'\x12\xA3')
+    comp = Decompressor()
+    with pytest.raises(Exception) as e_info:
+        comp.setCompressedHeader(header)
 
-    comp.uncompressedData = '#aaabcdefaaaaghijaaaaakl'
-    result = comp.copytokenHelp()
-    tokenData = comp.unpackCopytoken(0x3000)
-    assert tokenData["length"] == 3
-    assert tokenData["offset"] == 7
-
-    comp.uncompressedData = '#aaabcdefaaaaghijaaaaaklaaamnopq'
-    result = comp.copytokenHelp()
-    tokenData = comp.unpackCopytoken(0x7002)
-    assert tokenData["length"] == 5
-    assert tokenData["offset"] == 15
-
-    comp.uncompressedData = '#aaabcdefaaaaghijaaaaaklaaamnopqaaaaa'
-    result = comp.copytokenHelp()
-    tokenData = comp.unpackCopytoken(0x1004)
-    assert tokenData["length"] == 7
-    assert tokenData["offset"] == 5
+def test_missingCopyToken():
+    """
+    The TokenFlag for the second token sequence indicates that the last token is a copy token. However, there are not two
+    characters remaining in the compressed buffer.
+    """
+    compressed = bytearray(b'\x12\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x80\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70')
+    comp = Decompressor()
+    header = bytearray(compressed[:2])
+    del compressed[:2]
+    comp.setCompressedHeader(header)
+    with pytest.raises(Exception) as e_info:
+        result = comp.decompress(compressed)

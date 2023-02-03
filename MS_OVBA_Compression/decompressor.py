@@ -1,4 +1,5 @@
 import struct
+from MS_OVBA_Compression.helpers import *
 class Decompressor:
 
     def __init__(self, endian = 'little'):
@@ -25,6 +26,7 @@ class Decompressor:
     def setCompressedHeader(self, compressedHeader):
         """
         The compressed header is two bytes. 12 signature byes followed by \011 and a single bit that is 0b1 if compressed
+        The documentation differs from real-world MS implementation. It's possible that enian-ness affects the packing order of these bits.
         """
         length = len(compressedHeader)
         if length != 2:
@@ -44,15 +46,12 @@ class Decompressor:
     def getCompressedChunkSize(self):
         return self.compressedChunkSize
 
-    def getCompressedChunk(self):
-        
+    def getCompressedChunk(self):  
         return self.getCompressedChunkHeader() + self.compressedData
 
     def getCompressedChunkHeader(self):
         compressedChunkFlag = 1 if self.compressed else 0
         intHeader = (self.compressed << 15) | 0x3000 | (self.compressedChunkSize - 3)
-        if intHeader > (2*0x7fff) or 0 > intHeader:
-            raise Exception('intHeader out of range: ' + str(intHeader))
         packSymbol = '<' if self.endian == 'little' else '>'
         format = packSymbol + 'H'
         return struct.pack(format, intHeader)
@@ -81,7 +80,8 @@ class Decompressor:
               else:
                   if len(data) < 2:
                       raise Exception("Copy Token does not exist. FlagToken was " + str(flagToken) + " and decompressed chunk is " + self.uncompressedData + '.')
-                  copyToken = self.unpackCopytoken(struct.unpack("<H", data[:2])[0])  # Note this this will always be little endian.
+                  help = copytokenHelp(len(self.uncompressedData))
+                  copyToken = unpackCopyToken(struct.unpack("<H", data[:2])[0], help)  # Note this this will always be little endian.
                   del data[:2]
                   
                   for i in range(copyToken["length"]):
@@ -89,38 +89,3 @@ class Decompressor:
                       length = len(self.uncompressedData)
                       self.uncompressedData.append(self.uncompressedData[-1 * offset])
         return self.uncompressedData
-
-    def copytokenHelp(self):
-        """
-        Calculate a lengthMask, offsetMask, and bitCount
-        """
-        difference = len(self.uncompressedData)
-        bitCount = self.ceilLog2(difference)
-        lengthMask = 0xFFFF >> bitCount
-        offsetMask = ~lengthMask & 0xFFFF
-        maxLength = 0xFFFF << bitCount + 3
-        return {
-            "lengthMask": lengthMask,
-            "offsetMask": offsetMask,
-            "bitCount": bitCount
-        }
-
-    def unpackCopytoken(self, copyToken):
-        """
-        calculate an offset and length from a 16 bit copytoken
-        """
-        help = self.copytokenHelp()
-        length = (copyToken & help["lengthMask"]) + 3
-        temp1 = copyToken & help["offsetMask"]
-        temp2 = 16 - help["bitCount"]
-        offset = (temp1 >> temp2) + 1
-        return {
-            "length": length,
-            "offset": offset
-        }
-
-    def ceilLog2(self, int):
-        i = 4
-        while 2 ** i < int:
-            i += 1
-        return i

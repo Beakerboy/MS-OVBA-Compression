@@ -34,13 +34,3 @@ def test_longPoorCompression():
     assert result[3] & 0xF0 == 0x30
     """
     pass
-
-packCopyTokenData = [
-    ([3, 8, 9], b'\x70\x00']),
-]
-
-@pytest.mark.paramatrize("inputs, expected", packCopyTokenData)
-def test_packCopyToken(inputs, expected):
-    comp = Compressor()
-    help = cmp.copytokenHelp(inputs[3])
-    assert comp.packCopyToken(inputs[0] ,inputs[1], help) == expected
