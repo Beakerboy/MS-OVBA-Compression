@@ -20,7 +20,7 @@ packCopyTokenData = [
     ([3, 7, 24], 0x3000),
     ([5, 15, 33], 0x7002),
     ([7, 5, 38], 0x1004),
-    ([3, 52, 54], 0x3C00),
+    ([3, 16, 54], 0x3C00),
 ]
 
 @pytest.mark.parametrize("inputs, expected", packCopyTokenData)
@@ -42,7 +42,7 @@ def test_copytokenHelp(input, expected):
 
 unpackCopyTokenData = [
     ([9, 0x7000], [3, 8]),
-    ([54, 0x3C00], [3, 52]),
+    ([54, 0x3C00], [3, 16]),
 ]
 
 @pytest.mark.parametrize("inputs, expected", unpackCopyTokenData)
