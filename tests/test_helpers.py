@@ -42,6 +42,7 @@ def test_copytokenHelp(input, expected):
 
 unpackCopyTokenData = [
     ([9, 0x7000], [3, 8]),
+    ([33, 0x7002], [5, 15]),
     ([54, 0x3C00], [3, 16]),
 ]
 
