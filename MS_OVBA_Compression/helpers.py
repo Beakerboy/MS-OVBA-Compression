@@ -1,4 +1,3 @@
-import struct
 def copytokenHelp(difference):
     """
     Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
@@ -23,7 +22,7 @@ def packCopyToken(length, offset, help):
     temp1 = offset - 1
     temp2 = 16 - help["bitCount"]
     temp3 = length - 3
-    return struct.pack("<H", (temp1 << temp2) | temp3)
+    return (temp1 << temp2) | temp3
 
 def ceilLog2(int):
     i = 4
