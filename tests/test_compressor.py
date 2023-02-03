@@ -44,10 +44,22 @@ matchingData = [
     (b'aaa', [3, 12]),
 ]
 
-@pytest.mark.parametrize("input, expected", matchingData) 
+@pytest.mark.parametrize("input, expected", matchingData)
 def test_matching(input, expected):
     comp = Compressor()
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
     offset, length =  comp.matching(input)
     assert length == expected[0]
     assert offset == expected[1]
+
+compressTokenData = [
+    (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x23', 0]),
+]
+@pytest.mark.parametrize("input, expected", compressTokenData)
+def test_compressToken(input, expected):
+    comp = Compressor()
+    comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
+    uncompressed, token, flag = comp.compressToken(input)
+    assert uncompressed == expected[0]
+    assert token == expected[1]
+    assert flag == expected[2]
