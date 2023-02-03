@@ -69,13 +69,7 @@ def test_decompressUnableToCompressOneToken1():
     expected = bytearray("abcdefghijklmnopqrstuv.", "ascii")
     assert expected == result
 
-def test_CopytokenHelp():
+def test_smallHeader():
     comp = Decompressor()
-    comp.uncompressedData = 'Attribute VB_Name = "Sheet1"\x0D\x0A'
-    result = comp.copytokenHelp()
-    assert result["bitCount"] == 5
-    assert result["lengthMask"] == 0x07FF
-    assert result["offsetMask"] == 0xF800
-    tokenData = comp.unpackCopytoken(0xE80A)
-    assert tokenData["length"] == 13
-    assert tokenData["offset"] == 30
+    with pytest.raises(Exception) as e_info:
+        comp.setCompressedHeader(b'\x07')
