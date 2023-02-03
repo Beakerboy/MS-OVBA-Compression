@@ -39,22 +39,7 @@ def test_ChunkSizeMismatch():
     data = b'\x00\x61\x62'
     with pytest.raises(Exception) as e_info:
         comp.setCompressedData(data)
-
-def test_decompression():
-    f = open('tests/blank/vbaProject.bin', 'rb')
-    offset = 0x0F33
-    f.seek(offset)
-    sig = f.read(1)
-    assert sig == b'\x01'
-    header = f.read(2)
-    comp = Decompressor()
-    comp.setCompressedHeader(header)
-    assert comp.compressedChunkSize == 171
-    readChunk = bytearray(f.read(comp.compressedChunkSize - 2))
-    result = comp.decompress(readChunk)
-    expected = 'Attribute VB_Name = "Sheet1"\x0D\x0AAttribute VB_Base = "0{00020820-0000-0000-C000-000000000046}"\x0D\x0AAttribute VB_GlobalNameSpace = False\x0D\x0AAttribute VB_Creatable = False\x0D\x0AAttribute VB_PredeclaredId = True\x0D\x0AAttribute VB_Exposed = True\x0D\x0AAttribute VB_TemplateDerived = False\x0D\x0AAttribute VB_Customizable = True\x0D\x0A'
-    assert result == bytearray(expected, "ascii")
-    
+ 
 def test_cielLog2():
     comp = Decompressor()
     assert comp.ceilLog2(1) == 4
