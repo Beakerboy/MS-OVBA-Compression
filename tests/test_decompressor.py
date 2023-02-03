@@ -91,3 +91,16 @@ def test_badSignature():
     comp = Decompressor()
     with pytest.raises(Exception) as e_info:
         comp.setCompressedHeader(header)
+
+def test_missingCopyToken():
+    """
+    The TokenFlag for the second token sequence indicates that the last token is a copy token. However, there are not two
+    characters remaining in the compressed buffer.
+    """
+    compressed = bytearray(b'\x12\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x80\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70')
+    comp = Decompressor()
+    header = bytearray(compressed[:2])
+    del compressed[:2]
+    comp.setCompressedHeader(header)
+    with pytest.raises(Exception) as e_info:
+        result = comp.decompress(compressed)
