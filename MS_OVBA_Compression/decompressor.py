@@ -1,4 +1,5 @@
 import struct
+from MS_OVBA_Compression.helpers import *
 class Decompressor:
 
     def __init__(self, endian = 'little'):
@@ -95,7 +96,7 @@ class Decompressor:
         Calculate a lengthMask, offsetMask, and bitCount
         """
         difference = len(self.uncompressedData)
-        bitCount = self.ceilLog2(difference)
+        bitCount = ceilLog2(difference)
         lengthMask = 0xFFFF >> bitCount
         offsetMask = ~lengthMask & 0xFFFF
         maxLength = 0xFFFF << bitCount + 3
@@ -118,9 +119,3 @@ class Decompressor:
             "length": length,
             "offset": offset
         }
-
-    def ceilLog2(self, int):
-        i = 4
-        while 2 ** i < int:
-            i += 1
-        return i
