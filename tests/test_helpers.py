@@ -15,8 +15,8 @@ def test_cielLog2(input, expected):
     assert ceilLog2(input) == expected
 
 packCopyTokenData = [
-    ([3, 8, 9], 0x7000),
-    ([4, 8, 17], 0x3801),
+    ([3, 8, 10], 0x7000),
+    ([4, 8, 18], 0x3801),
 ]
 
 @pytest.mark.parametrize("inputs, expected", packCopyTokenData)
