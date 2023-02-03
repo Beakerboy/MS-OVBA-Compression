@@ -5,7 +5,7 @@ class Compressor:
         self.endian = endian
 
         # The compressed container begins with a sgnature byte and an empty header
-        self.compressedContainer = bytearray(b'\x01')
+        self.compressedContainer = b'\x01'
 
     def compress(self, data):
         """
