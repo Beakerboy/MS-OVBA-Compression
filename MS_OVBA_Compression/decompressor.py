@@ -52,8 +52,6 @@ class Decompressor:
     def getCompressedChunkHeader(self):
         compressedChunkFlag = 1 if self.compressed else 0
         intHeader = (self.compressed << 15) | 0x3000 | (self.compressedChunkSize - 3)
-        if intHeader > (2*0x7fff) or 0 > intHeader:
-            raise Exception('intHeader out of range: ' + str(intHeader))
         packSymbol = '<' if self.endian == 'little' else '>'
         format = packSymbol + 'H'
         return struct.pack(format, intHeader)
