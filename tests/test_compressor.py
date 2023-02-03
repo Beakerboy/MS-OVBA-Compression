@@ -36,6 +36,7 @@ def test_longPoorCompression():
     pass
 
 matchingData = [
+    (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [0, 0]),
     (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 8]),
     (b'aaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [4, 8]),
     (b'aaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 5]),
