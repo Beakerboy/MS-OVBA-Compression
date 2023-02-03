@@ -36,7 +36,7 @@ def test_longPoorCompression():
     pass
 
 packCopyTokenData = [
-    ([3, 8, 9], b'\x70\x00']),
+    ([3, 8, 9], b'\x70\x00'),
 ]
 
 @pytest.mark.paramatrize("inputs, expected", packCopyTokenData)
