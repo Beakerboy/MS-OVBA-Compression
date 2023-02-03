@@ -11,7 +11,7 @@ def test_maxCompression():
     input = b'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     comp = Compressor()
     expected = b'\x01\x03\xB0\x02\x61\x45\x00'
-    #assert comp.compress(input) == expected
+    assert comp.compress(input) == expected
 
 """
 tests for private methods
