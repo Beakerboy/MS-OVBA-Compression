@@ -21,14 +21,14 @@ def test_matching(input, expected):
 
 compressTokenData = [
     (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x23', 0]),
-    (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x70\x00', 1]),
+    (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x00\x70', 1]),
 ]
 @pytest.mark.parametrize("input, expected", compressTokenData)
 def test_compressToken(input, expected):
     comp = Compressor()
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-    uncompressed, token, flag = comp.compressToken(input)
+    uncompressed, packedToken, flag = comp.compressToken(input)
     assert uncompressed == expected[0]
     assert flag == expected[2]
-    assert token == expected[1]
+    assert packedToken == expected[1]
 
