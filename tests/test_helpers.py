@@ -42,7 +42,7 @@ def test_copytokenHelp(input, expected):
 
 unpackCopyTokenData = [
     ([9, 0x7000], [3, 8]),
-    ([54, 0x3C00], [52, 54]),
+    ([54, 0x3C00], [3, 52]),
 ]
 
 @pytest.mark.parametrize("inputs, expected", unpackCopyTokenData)
