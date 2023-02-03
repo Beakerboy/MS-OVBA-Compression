@@ -68,7 +68,7 @@ class Compressor:
                 uncompressedData, packedToken, flag = self.compressToken(uncompressedData)
                 tokenFlag = (flag << i) | tokenFlag
                 tokens += packedToken
-        tokenSequence = bytes(tokenFlag) + tokens
+        tokenSequence = tokenFlag.to_bytes(1, "little") + tokens
         return uncompressedData, tokenSequence
 
     def compressToken(self, uncompressedData):
