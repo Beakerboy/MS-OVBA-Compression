@@ -81,7 +81,7 @@ class Compressor:
         offset, length = self.matching(uncompressedData)
         if offset > 0:
             difference =  len(self.activeChunk) - len(uncompressedStream)
-            help = copyTokenHelp(differnece)
+            help = copyTokenHelp(difference)
             token = struct.pack("<H", packCopyToken(length, offset, help))
 
             uncompressedData = uncompressedData[length:]
