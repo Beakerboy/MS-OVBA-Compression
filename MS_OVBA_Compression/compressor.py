@@ -1,4 +1,3 @@
-import struct
 from MS_OVBA_Compression.helpers import *
 
 class Compressor:
@@ -6,7 +5,7 @@ class Compressor:
         self.endian = endian
 
         # The compressed container begins with a sgnature byte and an empty header
-        self.compressedData = bytearray(b'\x01')
+        self.compressedContainer = bytearray(b'\x01')
 
     def compress(self, data):
         """
@@ -22,10 +21,10 @@ class Compressor:
         numberOfChunks = (len(data) - 1) // 4096 + 1
         
         for i in range(numberOfChunks):
-            chunk = self.compressChunk(data[i * 4096: (i + 1) * 4096])
-            self.compressedData += chunk
+            compressedChunk = self.compressChunk(data[i * 4096: (i + 1) * 4096])
+            self.compressedContainer += compressedChunk
             
-        return self.compressedData
+        return self.compressedContainer
 
     def compressChunk(self, data):
         """
@@ -40,8 +39,6 @@ class Compressor:
         chunk = b''
         i = 0
         while len(uncompressedData) > 0:
-            if i > 5000:
-                raise Exception("Loop executed too many times. Remaining data:" + str(uncompressedData, "ascii") + str(chunk, "ascii"))
             uncompressedData, compressedTokenSequence = self.compressTokenSequence(uncompressedData)
             chunk += compressedTokenSequence
             i += 1
@@ -53,9 +50,7 @@ class Compressor:
             chunk = data.ljust(4096, '\0')
             compressAndSig = 0x3000
         header = compressAndSig & chunkSize
-        packSymbol = '<' if self.endian == 'little' else '>'
-        format = packSymbol + 'H'
-        chunk = struct.pack(format, header) + chunk
+        chunk = header.to_bytes(2, self.endian) + chunk
         return chunk
 
     def compressTokenSequence(self, data):
