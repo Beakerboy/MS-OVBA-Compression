@@ -8,5 +8,5 @@ def test_normalCompresson():
     result = comp.compress(input)
     decomp = Decompressor()
     decomp.setCompressedHeader(result[1:2])
-    chunk = resut[3:]
+    chunk = result[3:]
     assert decomp.decompress(chunk) == input
