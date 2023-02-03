@@ -34,10 +34,10 @@ matchingData = [
     (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [0, 0]),
     (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 8]),
     (b'aaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [4, 8]),
-    (b'aaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 5]),
+    (b'aaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 5]), # MS Office for some reason chooses [3, 7]
     (b'aaaaaaaaaaaarstuvwxyzaaa', [5, 15]),
-    (b'aaaaaaarstuvwxyzaaa', [7, 1]),
-    (b'aaa', [3, 12]),
+    (b'aaaaaaarstuvwxyzaaa', [7, 1]),              # MS Office for some reason chooses [7, 3]
+    (b'aaa', [3, 12]),                             # MS Office for some reason chooses [7, 16]
 ]
 
 @pytest.mark.parametrize("input, expected", matchingData)
