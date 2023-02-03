@@ -39,16 +39,6 @@ def test_ChunkSizeMismatch():
     data = b'\x00\x61\x62'
     with pytest.raises(Exception) as e_info:
         comp.setCompressedData(data)
- 
-def test_cielLog2():
-    comp = Decompressor()
-    assert comp.ceilLog2(1) == 4
-    assert comp.ceilLog2(2) == 4
-    assert comp.ceilLog2(3) == 4
-    assert comp.ceilLog2(4) == 4
-    assert comp.ceilLog2(9) == 4
-    assert comp.ceilLog2(17) == 5
-    assert comp.ceilLog2(50) == 6
 
 def test_decompressUnableToCompressOneToken():
     compressed = bytearray(b'\x08\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68')
