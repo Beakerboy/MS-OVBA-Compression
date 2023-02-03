@@ -13,3 +13,12 @@ ceilLog2Data = [
 @pytest.mark.paramatrize("input, expected", ceilLog2Data)
 def test_cielLog2(input, expected):
     assert ceilLog2(input) == expected
+
+packCopyTokenData = [
+    ([3, 8, 9], b'\x70\x00'),
+]
+
+@pytest.mark.parametrize("inputs, expected", packCopyTokenData)
+def test_packCopyToken(inputs, expected):
+    help = copytokenHelp(inputs[3])
+    assert packCopyToken(inputs[0] ,inputs[1], help) == expected
