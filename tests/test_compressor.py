@@ -21,7 +21,7 @@ def test_matching(input, expected):
 
 compressTokenData = [
     (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x23', 0]),
-    (b'aaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x70\x00', 1]),
+    (b'aaaaghiaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [b'aghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', b'\x70\x00', 1]),
 ]
 @pytest.mark.parametrize("input, expected", compressTokenData)
 def test_compressToken(input, expected):
