@@ -42,7 +42,7 @@ class Compressor:
             uncompressedData, compressedTokenSequence = self.compressTokenSequence(uncompressedData)
             compressedChunk += compressedTokenSequence
 
-        chunkSize = len(compressedChunk)
+        chunkSize = len(compressedChunk) - 1
         # if the compression algorithm produces a chunk too large, use raw.
         if chunkSize > 4096:
             chunkSize = 4096
