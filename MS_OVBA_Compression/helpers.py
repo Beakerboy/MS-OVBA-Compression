@@ -1,3 +1,4 @@
+import struct
 def copytokenHelp(self, difference):
     """
     Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
