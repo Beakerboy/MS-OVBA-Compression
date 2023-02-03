@@ -33,7 +33,7 @@ copytokenHelpData = [
     (17, [5, 0x07FF, 0xF800]),
 ]
 
-@pytest.mark.parametrize("input, expected", copyTokenhelpData)    
+@pytest.mark.parametrize("input, expected", copytokenHelpData)    
 def test_copytokenHelp(input, expected):
     result = copytokenHelp(input)
     assert result["bitCount"] == expected[0]
