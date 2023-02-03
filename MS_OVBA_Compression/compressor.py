@@ -84,7 +84,6 @@ class Compressor:
         if offset > 0:
             difference =  len(self.activeChunk) - len(uncompressedData)
             help = copyTokenHelp(difference)
-            # Can int.to_bytes() be used here instead?
             token = packCopyToken(length, offset, help).to_bytes(2, "little")
 
             uncompressedData = uncompressedData[length:]
