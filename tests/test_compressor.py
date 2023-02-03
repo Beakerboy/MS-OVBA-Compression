@@ -39,6 +39,6 @@ def test_matching():
     comp = Compressor()
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
     uncompressed = b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-    length, offset =  comp.matching(uncompressed)
+    offset, length =  comp.matching(uncompressed)
     assert length == 3
     assert offset == 8
