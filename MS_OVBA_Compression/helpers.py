@@ -3,7 +3,7 @@ def copytokenHelp(difference):
     """
     Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
     """
-    bitCount = self.ceilLog2(difference)
+    bitCount = ceilLog2(difference)
     lengthMask = 0xFFFF >> bitCount
     offsetMask = ~lengthMask & 0xFFFF
     maxLength = 0xFFFF << bitCount + 3
