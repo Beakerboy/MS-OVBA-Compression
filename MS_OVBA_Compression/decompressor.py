@@ -45,8 +45,7 @@ class Decompressor:
     def getCompressedChunkSize(self):
         return self.compressedChunkSize
 
-    def getCompressedChunk(self):
-        
+    def getCompressedChunk(self):  
         return self.getCompressedChunkHeader() + self.compressedData
 
     def getCompressedChunkHeader(self):
@@ -80,7 +79,8 @@ class Decompressor:
               else:
                   if len(data) < 2:
                       raise Exception("Copy Token does not exist. FlagToken was " + str(flagToken) + " and decompressed chunk is " + self.uncompressedData + '.')
-                  copyToken = self.unpackCopytoken(struct.unpack("<H", data[:2])[0])  # Note this this will always be little endian.
+                  help = copytokenHelp(len(self.uncompressedData))
+                  copyToken = unpackCopyToken(struct.unpack("<H", data[:2])[0], help)  # Note this this will always be little endian.
                   del data[:2]
                   
                   for i in range(copyToken["length"]):
@@ -88,32 +88,3 @@ class Decompressor:
                       length = len(self.uncompressedData)
                       self.uncompressedData.append(self.uncompressedData[-1 * offset])
         return self.uncompressedData
-
-    def copytokenHelp(self):
-        """
-        Calculate a lengthMask, offsetMask, and bitCount
-        """
-        difference = len(self.uncompressedData)
-        bitCount = ceilLog2(difference)
-        lengthMask = 0xFFFF >> bitCount
-        offsetMask = ~lengthMask & 0xFFFF
-        maxLength = 0xFFFF << bitCount + 3
-        return {
-            "lengthMask": lengthMask,
-            "offsetMask": offsetMask,
-            "bitCount": bitCount
-        }
-
-    def unpackCopytoken(self, copyToken):
-        """
-        calculate an offset and length from a 16 bit copytoken
-        """
-        help = self.copytokenHelp()
-        length = (copyToken & help["lengthMask"]) + 3
-        temp1 = copyToken & help["offsetMask"]
-        temp2 = 16 - help["bitCount"]
-        offset = (temp1 >> temp2) + 1
-        return {
-            "length": length,
-            "offset": offset
-        }
