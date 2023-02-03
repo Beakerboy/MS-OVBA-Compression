@@ -10,7 +10,7 @@ ceilLog2Data = [
     (17, 5),
     (50, 6),
 ]
-@pytest.mark.paramatrize("input, expected", ceilLog2Data)
+@pytest.mark.parametrize("input, expected", ceilLog2Data)
 def test_cielLog2(input, expected):
     assert ceilLog2(input) == expected
 
