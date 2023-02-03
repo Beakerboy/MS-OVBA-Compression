@@ -69,3 +69,7 @@ def test_badHeader(input):
     comp = Decompressor()
     with pytest.raises(Exception) as e_info:
         comp.setCompressedHeader(input)
+
+def test_longRawChunk():
+    compressed = bytearray(b'\xFE\x3F' + b'\x00' * 4096)
+    
