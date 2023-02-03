@@ -42,7 +42,7 @@ matchingData = [
 ]
 
 @pytest.mark.parametrize("input, expected", matchingData) 
-def test_matching():
+def test_matching(input, expected):
     comp = Compressor()
     comp.activeChunk = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
     offset, length =  comp.matching(input)
