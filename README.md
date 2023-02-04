@@ -39,7 +39,7 @@ compressed = b'\x01/°\x00#aaabcde²f\x00paghij\x018\x08akl\x000mnop\x06q\x02p\x
 comp.decompress(compressed)
 
 ```
-The cobjects can be initialized to indicate the endianness if the default little-endian is not desired. However, having never seen real world big-endian packed data
+The objects can be initialized to indicate the endianness if the default little-endian is not desired. However, having never seen real world big-endian packed data
 means this feature is untested.
 ```python
 # unsure if it should return:
