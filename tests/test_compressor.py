@@ -17,19 +17,22 @@ def test_longPoorCompression():
     """
     Every sequence of 8 bytes has a flag byte prepended to the compressed token sequence. In theory a 3640 byte sequence could
     "compress" to be larger than 4096 bytes.
+    """
     data = b''
     for i in range(7):
         for j in range(256):
-            data += bytes(i) + bytes(j)
+            data += i.to_bytes(i, "little") + j.to_bytes(1, "little")
+    for j in range(72):
+            data += i.to_bytes(8, "little") + j.to_bytes(1, "little")
     comp = Compressor()
     result = comp.compress(data)
     # the length is 1 container signature byte, 2 header bytes, and the original data padded to 4096 bytes
     assert len(result) == 4099
+    # The resulting chunk header will be 0xBFFF
     assert result[3] & 0xF0 == 0x30
-    """
-    pass
+
 """
-tests for private methods
+tests for private methods...for reference / troubleshooting. Note private methods may change in future releases without warning.
 matchingData = [
     (b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [0, 0]),
     (b'aaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa', [3, 8]),
