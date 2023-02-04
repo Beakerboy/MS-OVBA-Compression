@@ -29,7 +29,7 @@ class Decompressor:
 
             # Pop off the data we are working on from the buffer
             chunks = chunks[length + 2:]
-            decompressedChunk = self.decompressChunk(compressedChunk)
+            decompressedChunk = self._decompressChunk(compressedChunk)
             uncompressedData += decompressedChunk
 
             # If the last chunk is less than 4096 bytes, there better not be anything left in the buffer.
@@ -54,7 +54,7 @@ class Decompressor:
             raise Exception("Chunk signature must be three. Value is " + str(signature) + ".")
         return compressed, length
 
-    def decompressChunk(self, compressedChunk):
+    def _decompressChunk(self, compressedChunk):
         """
         Decompress bytes object
 
