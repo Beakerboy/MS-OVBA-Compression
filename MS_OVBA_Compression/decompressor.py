@@ -1,4 +1,3 @@
-import struct
 from MS_OVBA_Compression.helpers import *
 class Decompressor:
 
