@@ -17,8 +17,10 @@ class Decompressor:
                 raise Exception("Expecting " + str(length - 2) + " data bytes, but given " + str(len(chunks - 2)) + ".")
             compressedChunk = chunks[2:compressedDataLength + 2]
             chunks = chunks[length + 2:]
-            self.uncompressedData += self.decompressChunk(compressedChunk)
-            # if there are more chunks, this chunk must be 4096 bytes uncompressed
+            decompressedChunk = self.decompressChunk(compressedChunk)
+            self.uncompressedData += decompressedChunk
+            if len(decompessedChunk) < 4096 and len(chunks) > 0:
+                raise Exception("The provided Compressed Container is too long.")
 
     def unpackHeader(self, compressedHeader):
         length = len(compressedHeader)
