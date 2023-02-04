@@ -6,8 +6,7 @@ class Compressor:
     def __init__(self, endian='little'):
         self.endian = endian
 
-        # The compressed container begins with a sgnature byte and an empty
-        # header
+        # The compressed container begins with a sgnature byte.
         self.compressedContainer = b'\x01'
 
     def compress(self, data):
@@ -26,12 +25,12 @@ class Compressor:
         for i in range(numberOfChunks):
             start = i * 4096
             end = (i + 1) * 4096
-            compressedChunk = self.compressChunk(data[start: end])
+            compressedChunk = self._compressChunk(data[start: end])
             self.compressedContainer += compressedChunk
 
         return self.compressedContainer
 
-    def compressChunk(self, data):
+    def _compressChunk(self, data):
         """
         A chunk of data is 4096 bytes or less. This will return a stream of max
         length 4098, a 2 byte header and up to 4096 bytes of data.
@@ -45,7 +44,7 @@ class Compressor:
         uncompressedData = data
         compressedChunk = b''
         while len(uncompressedData) > 0:
-            compTokSeq = self.compressTokenSequence(uncompressedData)
+            compTokSeq = self._compressTokenSequence(uncompressedData)
             uncompressedData, compressedTokenSequence = compTokSeq
             compressedChunk += compressedTokenSequence
 
@@ -59,20 +58,20 @@ class Compressor:
         compressedChunk = header.to_bytes(2, self.endian) + compressedChunk
         return compressedChunk
 
-    def compressTokenSequence(self, data):
+    def _compressTokenSequence(self, data):
         uncompressedData = data
         tokenFlag = 0
         tokens = b''
         for i in range(8):
             if len(uncompressedData) > 0:
-                compTok = self.compressToken(uncompressedData)
+                compTok = self._compressToken(uncompressedData)
                 uncompressedData, packedToken, flag = compTok
                 tokenFlag = (flag << i) | tokenFlag
                 tokens += packedToken
         tokenSequence = tokenFlag.to_bytes(1, "little") + tokens
         return uncompressedData, tokenSequence
 
-    def compressToken(self, uncompressedData):
+    def _compressToken(self, uncompressedData):
         """
         Given a sequence of uncompressed data, return a single compressed
         token. Tokens are either one byte representing the value of the
@@ -81,7 +80,7 @@ class Compressor:
         """
         packedToken = b''
         tokenFlag = 0
-        offset, length = self.matching(uncompressedData)
+        offset, length = self._matching(uncompressedData)
         if offset > 0:
             difference = len(self.activeChunk) - len(uncompressedData)
             help = helpers.copyTokenHelp(difference)
@@ -96,7 +95,7 @@ class Compressor:
             uncompressedData = uncompressedData[1:]
         return uncompressedData, packedToken, tokenFlag
 
-    def matching(self, uncompressedStream):
+    def _matching(self, uncompressedStream):
         """
         Work backwards through the uncompressed data that has already been
         compressed to find the longest series of matching bytes.
