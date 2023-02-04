@@ -49,7 +49,7 @@ class Decompressor:
         uncompressedChunk = b''
         while len(compressedChunk) > 0:
             # The Flag Byte is one byte. pop it off
-            flagByte = data[0]
+            flagByte = compressedChunk[0]
             compressedChunk = compressedChunk[1:]
 
             # If we have a flag byte, we better have data to go with it.
