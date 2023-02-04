@@ -1,5 +1,5 @@
 import pytest
-from MS_OVBA_Compression.helpers import *
+from ms_ovba_compression.helpers import *
 
 ceilLog2Data = [
     (1, 4),
