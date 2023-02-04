@@ -1,5 +1,5 @@
 import pytest
-from ms_ovba_compression.helpers import *
+import ms_ovba_compression.helpers as helpers
 
 ceilLog2Data = [
     (1, 4),
@@ -14,7 +14,7 @@ ceilLog2Data = [
 
 @pytest.mark.parametrize("input, expected", ceilLog2Data)
 def test_cielLog2(input, expected):
-    assert ceilLog2(input) == expected
+    assert helpers.ceilLog2(input) == expected
 
 packCopyTokenData = [
     ([3, 8, 9], 0x7000),
@@ -28,8 +28,8 @@ packCopyTokenData = [
 
 @pytest.mark.parametrize("inputs, expected", packCopyTokenData)
 def test_packCopyToken(inputs, expected):
-    help = copyTokenHelp(inputs[2])
-    assert packCopyToken(inputs[0] ,inputs[1], help) == expected
+    help = helpers.copyTokenHelp(inputs[2])
+    assert helpers.packCopyToken(inputs[0] ,inputs[1], help) == expected
 
 copytokenHelpData = [
     (9, [4, 0x0FFF, 0xF000]),
@@ -39,7 +39,7 @@ copytokenHelpData = [
 
 @pytest.mark.parametrize("input, expected", copytokenHelpData)    
 def test_copytokenHelp(input, expected):
-    result = copyTokenHelp(input)
+    result = helpers.copyTokenHelp(input)
     assert result["bitCount"] == expected[0]
     assert result["lengthMask"] == expected[1]
     assert result["offsetMask"] == expected[2]
@@ -53,7 +53,7 @@ unpackCopyTokenData = [
 
 @pytest.mark.parametrize("inputs, expected", unpackCopyTokenData)
 def test_unpackCopyToken(inputs, expected):
-    help = copyTokenHelp(inputs[0])
-    result = unpackCopyToken(inputs[1], help)
+    help = helpers.copyTokenHelp(inputs[0])
+    result = helpers.unpackCopyToken(inputs[1], help)
     assert result["length"] == expected[0]
     assert result["offset"] == expected[1]
