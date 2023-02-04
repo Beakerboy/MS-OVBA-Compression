@@ -1,106 +1,73 @@
 import pytest
 from MS_OVBA_Compression.decompressor import Decompressor
 
-def test_Decompressor():
-    comp = Decompressor()
-    header = b'\x19\xB0'
-    comp.setCompressedHeader(header)
-    expected = 28
-    result = comp.getCompressedChunkSize()
-    assert expected == result
-    data = b'\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70\x00\x71\x72\x73\x74\x75\x76\x2E'
-    comp.setCompressedData(data)
-    assert comp.getCompressedChunk() == bytearray(header) + bytearray(data)
-
 def test_normalCompression():
     comp = Decompressor()
-    expected = "#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa"
-    compressed = bytearray(b'\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00\x3C')
-    header = bytearray(compressed[:2])
-    del compressed[:2]
-    comp.setCompressedHeader(header)
+    expected = b"#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa"
+    compressed = b'\x01\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00\x3C'
     result = comp.decompress(compressed)
-    assert bytearray(expected, "ascii") == result
+    assert comp.decompress(compressed) == expected
 
-def test_ChunkSizeMismatch():
+def test_badSignatureByte():
+    """
+    The container must have a signature byte
+    """
     comp = Decompressor()
-    header = b'\x19\xB0'
-    comp.setCompressedHeader(header)
-    data = b'\x00\x61\x62'
-    with pytest.raises(Exception) as e_info:
-        comp.setCompressedData(data)
-
-def test_decompressUnableToCompressOneToken():
-    compressed = bytearray(b'\x08\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68')
-    comp = Decompressor()
-    header = bytearray(compressed[:2])
-    del compressed[:2]
-    comp.setCompressedHeader(header)
-    result = comp.decompress(compressed)
-    expected = bytearray("abcdefgh", "ascii")
-    assert expected == result
-
-def test_zeroTokens():
-    compressed = bytearray(b'\x00\xB0\x00')
-    comp = Decompressor()
-    header = bytearray(compressed[:2])
-    del compressed[:2]
-    comp.setCompressedHeader(header)
+    compressed = b'\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00\x3C'
     with pytest.raises(Exception) as e_info:
         result = comp.decompress(compressed)
-    
-def test_decompressUnableToCompressOneToken1():
-    compressed = bytearray(b'\x19\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70\x00\x71\x72\x73\x74\x75\x76\x2E')
-    comp = Decompressor()
-    header = bytearray(compressed[:2])
-    del compressed[:2]
-    comp.setCompressedHeader(header)
-    result = comp.decompress(compressed)
-    expected = bytearray("abcdefghijklmnopqrstuv.", "ascii")
-    assert expected == result
 
-badHeaderData = [
-    (b'\x07'),
-    (b'\x07\xC4\x24'),
-]
-
-@pytest.mark.parametrize("input", badHeaderData)
-def test_badHeader(input):
+def test_containerTooShort():
     """
-    The header must only be two bytes in length
+    The container cannot be shorter then specified by the header
     """
     comp = Decompressor()
+    compressed = b'\x01\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00'
     with pytest.raises(Exception) as e_info:
-        comp.setCompressedHeader(input)
+        result = comp.decompress(compressed)
 
-def test_longRawChunk():
+def test_containerTooLong():
     """
-    If the chuck is raw (a 3 in the third nibble), it must be 4096 bytes in length.
+    The container must not be longer then specified in the header
     """
-    header = bytearray(b'\xFE\x3F')
     comp = Decompressor()
+    compressed = b'\x01\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00\3C\x3F\xFF'
     with pytest.raises(Exception) as e_info:
-        comp.setCompressedHeader(header)
+        result = comp.decompress(compressed)
 
-def test_badSignature():
+
+def test_badRawChunkHeader():
     """
-    The signature is part of the third nibble in a little-endian header. It must be either B or 3 if the data is compressed or raw respectively.
-    Should we test big endian packing?
+    Raw chunks must have 4096 bytes of data. Header = 0x3FFF
     """
-    header = bytearray(b'\x12\xA3')
     comp = Decompressor()
+    compressed = b'\x01\xFE\x3F\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00'
     with pytest.raises(Exception) as e_info:
-        comp.setCompressedHeader(header)
+        result = comp.decompress(compressed)
 
-def test_missingCopyToken():
+def test_flagWithNoData():
     """
-    The TokenFlag for the second token sequence indicates that the last token is a copy token. However, there are not two
-    characters remaining in the compressed buffer.
+    If a flag byte is present, there must be data after it.
     """
-    compressed = bytearray(b'\x12\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x80\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70')
     comp = Decompressor()
-    header = bytearray(compressed[:2])
-    del compressed[:2]
-    comp.setCompressedHeader(header)
+    compressed = b'\x01\x29\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10'
+    with pytest.raises(Exception) as e_info:
+        result = comp.decompress(compressed)
+
+def test_badHeaderSignature():
+    """
+    The header signature must be 0b011
+    """
+    comp = Decompressor()
+    compressed = b'\x01\x2F\xA0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00\x3C'
+    with pytest.raises(Exception) as e_info:
+        result = comp.decompress(compressed)
+
+def test_incompleteCopyToken():
+    """
+    A copy token must be two bytes. test for early termination
+    """
+    comp = Decompressor()
+    compressed = b'\x01\x2A\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x01\x77'
     with pytest.raises(Exception) as e_info:
         result = comp.decompress(compressed)
