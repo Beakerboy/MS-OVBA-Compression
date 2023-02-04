@@ -28,7 +28,7 @@ amount of normalization before compression. If you are interested in writing or 
 from MS_OVBA_Copression.compressor import Compressor
 from MS_OVBA_Copression.decompressor import Decompressor
 
-# returns b'\x01\x19\xB0\x00abcdefgh\x00ijklmnop\x00qrstuv.'
+# returns b'\x01\x19°\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
 comp = Compressor()
 comp.compress(input)
