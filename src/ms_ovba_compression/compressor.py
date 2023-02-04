@@ -1,5 +1,6 @@
 from MS_OVBA_Compression.helpers import *
 
+
 class Compressor:
 
 
@@ -8,6 +9,7 @@ class Compressor:
 
         # The compressed container begins with a sgnature byte and an empty header
         self.compressedContainer = b'\x01'
+
 
     def compress(self, data):
         """
@@ -27,6 +29,7 @@ class Compressor:
             self.compressedContainer += compressedChunk
             
         return self.compressedContainer
+
 
     def compressChunk(self, data):
         """
@@ -54,6 +57,7 @@ class Compressor:
         compressedChunk = header.to_bytes(2, self.endian) + compressedChunk
         return compressedChunk
 
+
     def compressTokenSequence(self, data):
         uncompressedData = data
         tokenFlag = 0
@@ -66,6 +70,7 @@ class Compressor:
                 tokens += packedToken
         tokenSequence = tokenFlag.to_bytes(1, "little") + tokens
         return uncompressedData, tokenSequence
+
 
     def compressToken(self, uncompressedData):
         """
@@ -89,6 +94,7 @@ class Compressor:
             packedToken = uncompressedData[0].to_bytes(1, "little")
             uncompressedData = uncompressedData[1:]
         return uncompressedData, packedToken, tokenFlag
+
 
     def matching(self, uncompressedStream):
         """
