@@ -1,4 +1,4 @@
-from ms_ovba_compression.helpers import *
+import ms_ovba_compression.helpers as helpers
 
 
 class Decompressor:
@@ -115,11 +115,11 @@ class Decompressor:
                             + str(flagToken) + " and decompressed chunk is "
                             + self.uncompressedData + '.')
                         raise Exception(message)
-                    help = copyTokenHelp(len(uncompressedChunk))
+                    help = helpers.copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
                     copyToken = int.from_bytes(compressedChunk[:2], "little")
-                    copyTokenData = unpackCopyToken(copyToken, help)
+                    copyTokenData = helpers.unpackCopyToken(copyToken, help)
                     compressedChunk = compressedChunk[2:]
                     offset = copyTokenData["offset"]
 
