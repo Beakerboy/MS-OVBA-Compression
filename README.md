@@ -38,6 +38,17 @@ comp = Decompressor()
 compressed = b'\x01/°\x00#aaabcde²f\x00paghij\x018\x08akl\x000mnop\x06q\x02p\x04\x10rstuv\x10wxyz\x00<'
 comp.decompress(compressed)
 
+```
+The objects can be initialized to indicate the endianness if the default little-endian is not desired. However, having never seen real world big-endian packed data
+means this feature is untested.
+```python
+# unsure if it should return:
+# b'\x01°\x19\x00abcdefgh\x00ijklmnop\x00qrstuv.'
+# or
+# b'\x01\x01—\x00abcdefgh\x00ijklmnop\x00qrstuv.'
+input = b'abcdefghijklmnopqrstuv.'
+comp = Compressor("big")
+comp.compress(input)
 
 ```
 

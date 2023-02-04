@@ -1,6 +1,7 @@
 def copyTokenHelp(difference):
     """
-    Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
+    Calculate a lengthMask, offsetMask, and bitCount from the length of the
+    uncompressedData.
     """
     bitCount = ceilLog2(difference)
     lengthMask = 0xFFFF >> bitCount
@@ -12,6 +13,7 @@ def copyTokenHelp(difference):
         "bitCount": bitCount,
         "maxLength": maxLength
     }
+
 
 def unpackCopyToken(copyToken, help):
     """
@@ -26,6 +28,7 @@ def unpackCopyToken(copyToken, help):
         "offset": offset
     }
 
+
 def packCopyToken(length, offset, help):
     """
     Create the copy token from the length, offset, and currect position
@@ -36,6 +39,7 @@ def packCopyToken(length, offset, help):
     temp2 = 16 - help["bitCount"]
     temp3 = length - 3
     return (temp1 << temp2) | temp3
+
 
 def ceilLog2(int):
     i = 4
