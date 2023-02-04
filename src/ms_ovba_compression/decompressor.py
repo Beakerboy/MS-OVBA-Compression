@@ -37,7 +37,7 @@ class Decompressor:
             # If we have less data then we are supposed to, we have a problem.
             if len(chunks) < length:
                 message = ("Expecting " + str(length - 2)
-                           + " data bytes, but given " + str(len(chunks - 2))
+                           + " data bytes, but given " + str(len(chunks) - 2)
                            + ".")
                 raise Exception(message)
 
