@@ -18,17 +18,17 @@ class Compressor:
         :return: compressed data
         :rtype: bytes
         """
-	
+
         self.originalData = data
 
         numberOfChunks = (len(data) - 1) // 4096 + 1
-        
+
         for i in range(numberOfChunks):
             start = i * 4096
             end = (i + 1) * 4096
             compressedChunk = self.compressChunk(data[start: end])
             self.compressedContainer += compressedChunk
-            
+
         return self.compressedContainer
 
     def compressChunk(self, data):
@@ -44,7 +44,6 @@ class Compressor:
         compressAndSig = 0xB000
         uncompressedData = data
         compressedChunk = b''
-        i = 0
         while len(uncompressedData) > 0:
             uncompressedData, compressedTokenSequence = self.compressTokenSequence(uncompressedData)
             compressedChunk += compressedTokenSequence
@@ -65,7 +64,6 @@ class Compressor:
         tokens = b''
         for i in range(8):
             if len(uncompressedData) > 0:
-                token = b''
                 uncompressedData, packedToken, flag = self.compressToken(uncompressedData)
                 tokenFlag = (flag << i) | tokenFlag
                 tokens += packedToken
@@ -80,12 +78,12 @@ class Compressor:
         replacement sequence. The flag byte is 1 if replacement took place
         """
         packedToken = b''
-        tokenflag = 0
+        tokenFlag = 0
         offset, length = self.matching(uncompressedData)
         if offset > 0:
-            difference =  len(self.activeChunk) - len(uncompressedData)
-            help = copyTokenHelp(difference)
-            tokenInt = packCopyToken(length, offset, help)
+            difference = len(self.activeChunk) - len(uncompressedData)
+            help = helpers.copyTokenHelp(difference)
+            tokenInt = helpers.packCopyToken(length, offset, help)
             packedToken = tokenInt.to_bytes(2, "little")
 
             uncompressedData = uncompressedData[length:]
@@ -111,7 +109,7 @@ class Compressor:
             D = len(self.activeChunk) - len(uncompressedStream)
             L = 0
             while (D < len(self.activeChunk)
-                and self.activeChunk[D] == self.activeChunk[C]):
+                   and self.activeChunk[D] == self.activeChunk[C]):
                 C += 1
                 D += 1
                 L += 1
@@ -119,10 +117,10 @@ class Compressor:
                 bestLength = L
                 bestCandidate = candidate
             candidate -= 1
-            
+
         if bestLength >= 3:
-            difference =  len(self.activeChunk) - len(uncompressedStream)
-            help = copyTokenHelp(difference)
+            difference = len(self.activeChunk) - len(uncompressedStream)
+            help = helpers.copyTokenHelp(difference)
             maximumLength = help["maxLength"]
             length = min(maximumLength, bestLength)
             offset = (len(self.activeChunk)
