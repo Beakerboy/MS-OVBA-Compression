@@ -1,5 +1,5 @@
 import pytest
-from MS_OVBA_Compression.compressor import Compressor
+from ms_ovba_compression.compressor import Compressor
 
 def test_unableToCompress():
     input = b'abcdefghijklmnopqrstuv.'
