@@ -31,7 +31,7 @@ class Decompressor:
 
         # the 12 most significant bits is three less than the chunk size
         length = (intHeader & 0x0FFF) + 3
-        if compressed == 0 and compressedChunkSize != 4096:
+        if compressed == 0 and length != 4098:
             raise Exception("If uncompressed, chunk must be 4096 bytes.")
         signature = (intHeader & 0x7000) >> 12
         if signature != 3:
