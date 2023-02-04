@@ -42,10 +42,10 @@ comp.decompress(compressed)
 The cobjects can be initialized to indicate the endianness if the default little-endian is not desired. However, having never seen real world big-endian packed data
 means this feature is untested.
 ```python
-# unsure if it should retu:
+# unsure if it should return:
 # b'\x01°\x19\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 # or
-# # b'\x01\x01—\x00abcdefgh\x00ijklmnop\x00qrstuv.'
+# b'\x01\x01—\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
 comp = Compressor("big")
 comp.compress(input)
