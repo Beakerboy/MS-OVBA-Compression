@@ -81,4 +81,4 @@ class Decompressor:
                         uncompressedChunk += uncompressedChunk[-1 * offset].to_bytes(1, "little")
                 # Move the mask for the next round
                 flagMask = flagMask << 1
-        return self.uncompressedChunk
+        return uncompressedChunk
