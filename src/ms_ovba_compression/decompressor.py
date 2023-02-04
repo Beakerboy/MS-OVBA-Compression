@@ -2,7 +2,6 @@ from MS_OVBA_Compression.helpers import *
 
 
 class Decompressor:
-
     
     def __init__(self, endian = 'little'):
         self.endian = endian
@@ -48,7 +47,6 @@ class Decompressor:
                 raise Exception("The provided compressed container is too long.")
         return uncompressedData
 
-
     def _unpackHeader(self, compressedHeader):
         # Need to find out if this byte order is endian dependent. It seems the real world data had the bits packed little
         # endian and then the resulting two bytes packed little endian into the binary file.
@@ -64,7 +62,6 @@ class Decompressor:
         if signature != 3:
             raise Exception("Chunk signature must be three. Value is " + str(signature) + ".")
         return compressed, length
-
 
     def _decompressChunk(self, compressedChunk):
         """
