@@ -9,7 +9,6 @@ def test_normalCompression():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00\x3C')
-    result = comp.decompress(compressed)
     assert comp.decompress(compressed) == expected
 
 
@@ -50,7 +49,6 @@ def test_containerTooLong():
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00\3C\x3F\xFF')
     with pytest.raises(Exception):
         comp.decompress(compressed)
-
 
 
 def test_badRawChunkHeader():
