@@ -5,6 +5,13 @@ class Decompressor:
         self.endian = endian
 
     def decompress(self, compressedContainer):
+        """
+        Decompress a compressed container usng the MS-OVBA Compression Algorithim
+        
+        :param compressedContainer bytes: bytes of compressed data
+        :return: Uncompressed data
+        :rtype: bytes
+        """
         uncompressedData = b''
         # The compressed container must begin with the byte \x01
         if compressedContainer[0] != 0x01:
