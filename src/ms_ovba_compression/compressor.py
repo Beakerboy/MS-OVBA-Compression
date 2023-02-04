@@ -52,9 +52,9 @@ class Compressor:
         compressedChunk = b''
 
         # While there is data in the uncompressed buffer, build a token 
-        # sequence and compress it and add the compressed sequence to the 
+        # sequence and compress it and add the compressed sequence to the
         # compressed buffer.
-        while len(uncompressedData) > 0:
+        while len(self._uncompressedData) > 0:
             compressedChunk += self._compressTokenSequence()
 
         # After we are done, we need to ensure the final compressed chunk is
@@ -85,10 +85,11 @@ class Compressor:
 
     def _compressTokenSequence(self):
         """
-        A token sequence is a 1 byte token flag followed by 8 tokens. Each token
-        is one or two bytes. Each bit of the flag byte incates if the token
-        is a 1 byte literal token or a 2 byte copy token. The least significant
-        bit of the flag byte refers to the first token in the stream.
+        A token sequence is a 1 byte token flag followed by 8 tokens. Each
+        tokenis one or two bytes. Each bit of the flag byte incates if the
+        token is a 1 byte literal token or a 2 byte copy token. The least
+        significant bit of the flag byte refers to the first token in the
+        stream.
         """
 
         tokenFlag = 0
