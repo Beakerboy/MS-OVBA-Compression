@@ -45,7 +45,8 @@ class Compressor:
         uncompressedData = data
         compressedChunk = b''
         while len(uncompressedData) > 0:
-            uncompressedData, compressedTokenSequence = self.compressTokenSequence(uncompressedData)
+            compTokSeq = = self.compressTokenSequence(uncompressedData)
+            uncompressedData, compressedTokenSequence = compTokSeq
             compressedChunk += compressedTokenSequence
 
         chunkSize = len(compressedChunk) - 1
