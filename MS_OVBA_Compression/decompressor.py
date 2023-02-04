@@ -13,7 +13,7 @@ class Decompressor:
         while len(chunks) > 0:
             header = chunks[0:2]
             compressed, length = self.unpackHeader(header)
-            cmpressedDataLength = length - 2
+            compressedDataLength = length - 2
             if len(chunks) < length:
                 raise Exception("Expecting " + str(length - 2) + " data bytes, but given " + str(len(chunks - 2)) + ".")
             compressedChunk = chunks[2:compressedDataLength + 2]
