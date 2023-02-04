@@ -1,6 +1,7 @@
 import pytest
 import ms_ovba_compression.helpers as helpers
 
+
 ceilLog2Data = [
     (1, 4),
     (2, 4),
@@ -15,6 +16,7 @@ ceilLog2Data = [
 @pytest.mark.parametrize("input, expected", ceilLog2Data)
 def test_cielLog2(input, expected):
     assert helpers.ceilLog2(input) == expected
+
 
 packCopyTokenData = [
     ([3, 8, 9], 0x7000),
@@ -31,6 +33,7 @@ def test_packCopyToken(inputs, expected):
     help = helpers.copyTokenHelp(inputs[2])
     assert helpers.packCopyToken(inputs[0] ,inputs[1], help) == expected
 
+
 copytokenHelpData = [
     (9, [4, 0x0FFF, 0xF000]),
     (17, [5, 0x07FF, 0xF800]),
@@ -43,6 +46,7 @@ def test_copytokenHelp(input, expected):
     assert result["bitCount"] == expected[0]
     assert result["lengthMask"] == expected[1]
     assert result["offsetMask"] == expected[2]
+
 
 unpackCopyTokenData = [
     ([9, 0x7000], [3, 8]),
