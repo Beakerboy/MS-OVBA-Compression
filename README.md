@@ -16,7 +16,7 @@ that is slightly different than is produced using it's own documented procedure.
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install MS_OVBA_Compression.
 
 ```bash
-pip install MS_OVBA_Compression
+pip install ms_ovba_compression
 ```
 
 ## Usage
@@ -25,8 +25,8 @@ amount of normalization before compression. If you are interested in writing or 
 [Beakerboy/vbaProject-Compiler](https://github.com/Beakerboy/vbaProject-Compiler).
 
 ```python
-from MS_OVBA_Copression.compressor import Compressor
-from MS_OVBA_Copression.decompressor import Decompressor
+from ms_ovba_compression.compressor import Compressor
+from ms_ovba_compression.decompressor import Decompressor
 
 # returns b'\x01\x19°\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
