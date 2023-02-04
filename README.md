@@ -8,8 +8,8 @@ any VBA source code in the project. The VBA sources are compressed using the MS-
 
 It's worth noting that the compressed output may differ between this and a Microsoft Office applcation. The way the compression algorithm works, multiple valid
 compressed byte seqences are able to be decompressed into the same uncompressed stream. This project follows the algorithm documented in the 
-[MS-OVBA specification](https://interoperability.blob.core.windows.net/files/MS-OVBA/%5bMS-OVBA%5d.pdf), while the office applications seem to do something slightly
-different, but which yield the same original stream when uncompressed.
+[MS-OVBA specification](https://interoperability.blob.core.windows.net/files/MS-OVBA/%5bMS-OVBA%5d.pdf), while one of the test cases has a compressed container
+that is slightly different than is produced using it's own documented procedure.
 
 ## Installation
 
