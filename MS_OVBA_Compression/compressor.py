@@ -35,7 +35,7 @@ class Compressor:
         # Is endian-ness supposed to affect the header organization?
         # The docs state 12 length bits + 0b011 + compression-bit but real world little endian file has compression-bit + 0b011 + 12 length bits
         compressAndSig = 0xB000
-        uncompressedData = bytearray(data)
+        uncompressedData = data
         compressedChunk = b''
         i = 0
         while len(uncompressedData) > 0:
@@ -45,7 +45,7 @@ class Compressor:
         chunkSize = len(compressedChunk) - 1
         # if the compression algorithm produces a chunk too large, use raw.
         if chunkSize > 4096:
-            chunkSize = 4096
+            chunkSize = 4095
             compressedChunk = data.ljust(4096, b'\x00')
             compressAndSig = 0x3000
         header = compressAndSig | chunkSize
