@@ -4,10 +4,7 @@ import ms_ovba_compression.helpers as helpers
 class Compressor:
 
     def __init__(self, endian='little'):
-        self.endian = endian
-
-        # The compressed container begins with a sgnature byte.
-        self.compressedContainer = b'\x01'
+        self._endian = endian
 
     def compress(self, data):
         """
@@ -17,8 +14,8 @@ class Compressor:
         :return: compressed data
         :rtype: bytes
         """
-
-        self.originalData = data
+        # The compressed container begins with a sgnature byte.
+        compressedContainer = b'\x01'
 
         numberOfChunks = (len(data) - 1) // 4096 + 1
 
@@ -26,9 +23,9 @@ class Compressor:
             start = i * 4096
             end = (i + 1) * 4096
             compressedChunk = self._compressChunk(data[start: end])
-            self.compressedContainer += compressedChunk
+            compressedContainer += compressedChunk
 
-        return self.compressedContainer
+        return compressedContainer
 
     def _compressChunk(self, data):
         """
@@ -55,7 +52,7 @@ class Compressor:
             compressedChunk = data.ljust(4096, b'\x00')
             compressAndSig = 0x3000
         header = compressAndSig | chunkSize
-        compressedChunk = header.to_bytes(2, self.endian) + compressedChunk
+        compressedChunk = header.to_bytes(2, self._endian) + compressedChunk
         return compressedChunk
 
     def _compressTokenSequence(self, data):
