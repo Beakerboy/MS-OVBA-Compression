@@ -1,6 +1,6 @@
 from MS_OVBA_Compression.helpers import *
-         1         2         3         4         5         6         7         8
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+
 class Decompressor:
     
     def __init__(self, endian = 'little'):
