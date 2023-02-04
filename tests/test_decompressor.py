@@ -1,5 +1,5 @@
 import pytest
-from MS_OVBA_Compression.decompressor import Decompressor
+from ms_ovba_compression.decompressor import Decompressor
 
 def test_normalCompression():
     comp = Decompressor()
