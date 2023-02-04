@@ -10,6 +10,8 @@ ceilLog2Data = [
     (17, 5),
     (50, 6),
 ]
+
+
 @pytest.mark.parametrize("input, expected", ceilLog2Data)
 def test_cielLog2(input, expected):
     assert ceilLog2(input) == expected
@@ -23,6 +25,7 @@ packCopyTokenData = [
     ([3, 16, 54], 0x3C00),
 ]
 
+
 @pytest.mark.parametrize("inputs, expected", packCopyTokenData)
 def test_packCopyToken(inputs, expected):
     help = copyTokenHelp(inputs[2])
@@ -32,6 +35,7 @@ copytokenHelpData = [
     (9, [4, 0x0FFF, 0xF000]),
     (17, [5, 0x07FF, 0xF800]),
 ]
+
 
 @pytest.mark.parametrize("input, expected", copytokenHelpData)    
 def test_copytokenHelp(input, expected):
@@ -45,6 +49,7 @@ unpackCopyTokenData = [
     ([32, 0x7002], [5, 15]),
     ([54, 0x3C00], [3, 16]),
 ]
+
 
 @pytest.mark.parametrize("inputs, expected", unpackCopyTokenData)
 def test_unpackCopyToken(inputs, expected):
