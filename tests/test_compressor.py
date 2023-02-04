@@ -24,6 +24,7 @@ def test_longPoorCompression():
             data += i.to_bytes(i, "little") + j.to_bytes(1, "little")
     for j in range(72):
             data += i.to_bytes(8, "little") + j.to_bytes(1, "little")
+    assert len(data) < 4096
     comp = Compressor()
     result = comp.compress(data)
     # the length is 1 container signature byte, 2 header bytes, and the original data padded to 4096 bytes
