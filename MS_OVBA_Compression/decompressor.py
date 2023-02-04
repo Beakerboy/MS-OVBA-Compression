@@ -39,7 +39,6 @@ class Decompressor:
         return uncompressedData
 
     def _unpackHeader(self, compressedHeader):
-        length = len(compressedHeader)
         intHeader = int.from_bytes(compressedHeader, "little")
         # data is compressed if the least significat bit is 0b1
         compressed = (intHeader & 0x8000) >> 15
