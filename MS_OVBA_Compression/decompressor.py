@@ -72,7 +72,7 @@ class Decompressor:
                         raise Exception("Copy Token does not exist. FlagToken was " + str(flagToken) + " and decompressed chunk is " + self.uncompressedData + '.')
                     help = copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck little endian
-                    copyToken = struct.unpack("<H", data[:2])
+                    copyToken = int.from_bytes(data[:2], "little")
                     copyTokenData = unpackCopyToken(copyToken, help)
                     compressedChunk = compressedChunk[2:]
                     offset = copyTokenData["offset"]
