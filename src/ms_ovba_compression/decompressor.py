@@ -111,7 +111,7 @@ class Decompressor:
                     # determine the offset and length of the replacement
                     # string. There better be 2 bytes or we're in trouble.
                     if len(compressedChunk) < 2:
-                        message = ("Copy Token does not exist.')
+                        message = "Copy Token does not exist."
                         raise Exception(message)
                     help = helpers.copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck
