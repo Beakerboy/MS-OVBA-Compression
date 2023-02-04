@@ -40,7 +40,7 @@ class Decompressor:
 
     def decompressChunk(self, compressedChunk):
         """
-        Decompress a bytearray
+        Decompress bytes object
 
         :param data bytes: bytes of compressed data
         :return: bytes
