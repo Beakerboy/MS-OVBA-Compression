@@ -4,7 +4,7 @@ import ms_ovba_compression.helpers as helpers
 class Decompressor:
 
     def __init__(self, endian='little'):
-        self.endian = endian
+        self._endian = endian
 
     def decompress(self, compressedContainer):
         """
@@ -37,7 +37,7 @@ class Decompressor:
             # If we have less data then we are supposed to, we have a problem.
             if len(chunks) < length:
                 message = ("Expecting " + str(length - 2)
-                           + " data bytes, but given " + str(len(chunks - 2))
+                           + " data bytes, but given " + str(len(chunks) - 2)
                            + ".")
                 raise Exception(message)
 
@@ -57,10 +57,11 @@ class Decompressor:
         return uncompressedData
 
     def _unpackHeader(self, compressedHeader):
-        # Need to find out if this byte order is endian dependent. It seems the
+        # Need to find out if this bit order is endian dependent. It seems the
         # real world data had the bits packed little endian and then the
         # resulting two bytes packed little endian into the binary file.
-        intHeader = int.from_bytes(compressedHeader, "little")
+        intHeader = int.from_bytes(compressedHeader, self._endian)
+
         # Data is compressed if the least significat bit is 0b1
         compressed = (intHeader & 0x8000) >> 15
 
