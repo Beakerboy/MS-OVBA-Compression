@@ -110,8 +110,8 @@ class Compressor:
             C = candidate
             D = len(self.activeChunk) - len(uncompressedStream)
             L = 0
-            while D < len(self.activeChunk) 
-                and self.activeChunk[D] == self.activeChunk[C]:
+            while (D < len(self.activeChunk)
+                and self.activeChunk[D] == self.activeChunk[C]):
                 C += 1
                 D += 1
                 L += 1
