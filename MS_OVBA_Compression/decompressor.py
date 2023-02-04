@@ -81,7 +81,7 @@ class Decompressor:
                         # Note that this can mean that we could possibly copy new data multiple times, ie. offset 1 length 7
                         offset = copyTokenData["offset"]
                         length = len(uncompressedData)
-                        uncompressedData += uncompressedData[-1 * offset].to_bytes(1, "little")
+                        uncompressedChunk += uncompressedChunk[-1 * offset].to_bytes(1, "little")
                 # Move the mask for the next round
                 flagMask = flagMask << 1
         return self.uncompressedData
