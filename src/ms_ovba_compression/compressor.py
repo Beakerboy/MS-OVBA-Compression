@@ -172,7 +172,7 @@ class Compressor:
             help = helpers.copyTokenHelp(difference)
             maximumLength = help["maxLength"]
             length = min(maximumLength, bestLength)
-            offset = (len(self._activeChunk) - len(self._uncompressedStream)
+            offset = (len(self._activeChunk) - len(self._uncompressedData)
                       - bestCandidate)
 
         return offset, length
