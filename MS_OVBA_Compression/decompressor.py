@@ -46,7 +46,6 @@ class Decompressor:
         :return: bytes
         :rtype: bytes
         """
-        orig_data = data
         uncompressedChunk = b''
         while len(compressedChunk) > 0:
           #flag is one byte
