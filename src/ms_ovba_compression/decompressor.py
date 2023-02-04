@@ -2,15 +2,15 @@ import ms_ovba_compression.helpers as helpers
 
 
 class Decompressor:
-    
-    def __init__(self, endian = 'little'):
+
+    def __init__(self, endian='little'):
         self.endian = endian
 
     def decompress(self, compressedContainer):
         """
         Decompress a compressed container usng the MS-OVBA Compression
         Algorithm
-        
+
         :param compressedContainer bytes: bytes of compressed data
         :return: Uncompressed data
         :rtype: bytes
@@ -98,7 +98,7 @@ class Decompressor:
             for i in range(8):
                 # Extract Flag bit from the token with the mask
                 flagBit = flagByte & flagMask
-                
+
                 if flagBit == 0:
                     # If the flag bit is zero, no compression ocurred, so just
                     # move the byte over.
@@ -111,9 +111,7 @@ class Decompressor:
                     # determine the offset and length of the replacement
                     # string. There better be 2 bytes or we're in trouble.
                     if len(compressedChunk) < 2:
-                        message = ("Copy Token does not exist. FlagToken was "
-                            + str(flagToken) + " and decompressed chunk is "
-                            + self.uncompressedData + '.')
+                        message = ("Copy Token does not exist.')
                         raise Exception(message)
                     help = helpers.copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck
@@ -125,8 +123,8 @@ class Decompressor:
 
                     # Copy data from the uncompressed chunk, {offset} bytes
                     # away, {length} number of times. Note that this can mean
-                    # that we could possibly copy new data multiple times, ie. 
-                    #offset 1 length 7
+                    # that we could possibly copy new data multiple times, ie.
+                    # offset 1 length 7
                     for i in range(copyTokenData["length"]):
                         copyInt = uncompressedChunk[-1 * offset]
                         copyByte = copyInt.to_bytes(1, "little")
