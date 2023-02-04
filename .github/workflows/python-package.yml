@@ -40,5 +40,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        pytest --cov=MS_OVBA_Compression
+        pytest --cov=ms_ovba_compression
         coveralls --service=github
