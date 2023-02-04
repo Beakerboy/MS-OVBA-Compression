@@ -111,20 +111,32 @@ class Compressor:
         token. Tokens are either one byte representing the value of the
         token or two bytes indicating the location and length of the
         replacement sequence. The flag byte is 1 if replacement took place.
+        The token that is returned will be packed into the required little
+        endian packing.
+        Should the flag bit be returned as bool instead of int?
+        :return: (packed copy token, flag bit)
+        :rtype: (bytes, int)
         """
         packedToken = b''
         tokenFlag = 0
         offset, length = self._matching()
         if offset > 0:
+            tokenFlag = 1
+
+            # Pack the offset and length data into the CopyToken, then pack
+            # the token little-endian.
             difference = len(self._activeChunk) - len(self._uncompressedData)
             help = helpers.copyTokenHelp(difference)
             tokenInt = helpers.packCopyToken(length, offset, help)
             packedToken = tokenInt.to_bytes(2, "little")
 
+            # Update the uncompressed buffer by removing the length we were
+            # able to match.
             self._uncompressedData = self._uncompressedData[length:]
-            tokenFlag = 1
         else:
             tokenFlag = 0
+
+            # No matching data was found, copy the literal token over.
             packedToken = self._uncompressedData[0].to_bytes(1, "little")
             self._uncompressedData = self._uncompressedData[1:]
         return packedToken, tokenFlag
@@ -133,6 +145,8 @@ class Compressor:
         """
         Work backwards through the uncompressed data that has already been
         compressed to find the longest series of matching bytes.
+        :return: (offset, length)
+        :rtype: (int, int)
         """
         offset = 0
         length = 0
