@@ -21,9 +21,10 @@ def test_longPoorCompression():
     data = b''
     for i in range(7):
         for j in range(256):
-            data += i.to_bytes(i, "little") + j.to_bytes(1, "little")
+            data += i.to_bytes(1, "little") + j.to_bytes(1, "little")
+    i = 8
     for j in range(72):
-            data += i.to_bytes(8, "little") + j.to_bytes(1, "little")
+        data += i.to_bytes(1, "little") + j.to_bytes(1, "little")
     assert len(data) < 4096
     comp = Compressor()
     result = comp.compress(data)
