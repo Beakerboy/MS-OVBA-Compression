@@ -16,7 +16,7 @@ class Compressor:
         """
         # The compressed container begins with a sgnature byte.
         compressedContainer = b'\x01'
-1234567890123456789012345678901234567890123456789012345678901234567890123456789
+
         # Each chunk must hold 4096 bytes of data except the final chunk.
         numberOfChunks = (len(data) - 1) // 4096 + 1
 
