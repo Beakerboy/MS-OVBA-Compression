@@ -1,5 +1,5 @@
 import pytest
-from MS_OVBA_Compression import *
+from ms_ovba_compression import *
 
 def test_normalCompresson():
     input = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
