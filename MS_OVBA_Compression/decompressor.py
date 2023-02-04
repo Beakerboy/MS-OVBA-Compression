@@ -15,7 +15,7 @@ class Decompressor:
             # The first two bytes of each chunk is the header. It will tell us how long the compressed data is in this chunk.
             # All chunks must be 4096 bytes uncompressed except for the last chunk.
             header = chunks[0:2]
-            compressed, length = self.unpackHeader(header)
+            compressed, length = self._unpackHeader(header)
 
             # The unpackHeader method gives us the chunk length. the data potion is two less than that.
             compressedDataLength = length - 2
@@ -38,10 +38,8 @@ class Decompressor:
                 raise Exception("The provided compressed container is too long.")
         return uncompressedData
 
-    def unpackHeader(self, compressedHeader):
+    def _unpackHeader(self, compressedHeader):
         length = len(compressedHeader)
-        if length != 2:
-            raise Exception("The header must be two bytes. Given " + str(length) + ".")
         intHeader = int.from_bytes(compressedHeader, "little")
         # data is compressed if the least significat bit is 0b1
         compressed = (intHeader & 0x8000) >> 15
