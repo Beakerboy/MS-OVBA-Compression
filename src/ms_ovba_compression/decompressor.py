@@ -9,7 +9,7 @@ class Decompressor:
     def decompress(self, compressedContainer):
         """
         Decompress a compressed container usng the MS-OVBA Compression
-        Algorithim
+        Algorithm
         
         :param compressedContainer bytes: bytes of compressed data
         :return: Uncompressed data
