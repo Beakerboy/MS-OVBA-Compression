@@ -1,7 +1,7 @@
 import pytest
 from ms_ovba_compression.decompressor import Decompressor
 
-1234567890123456789012345678901234567890123456789012345678901234567890123456789
+
 def test_normalCompression():
     comp = Decompressor()
     expected = b"#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa"
@@ -11,6 +11,7 @@ def test_normalCompression():
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00\x3C')
     result = comp.decompress(compressed)
     assert comp.decompress(compressed) == expected
+
 
 def test_badSignatureByte():
     """
@@ -24,6 +25,7 @@ def test_badSignatureByte():
     with pytest.raises(Exception):
         comp.decompress(compressed)
 
+
 def test_containerTooShort():
     """
     The container cannot be shorter then specified by the header
@@ -35,6 +37,7 @@ def test_containerTooShort():
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00')
     with pytest.raises(Exception):
         comp.decompress(compressed)
+
 
 def test_containerTooLong():
     """
@@ -49,6 +52,7 @@ def test_containerTooLong():
         comp.decompress(compressed)
 
 
+
 def test_badRawChunkHeader():
     """
     Raw chunks must have 4096 bytes of data. Header = 0x3FFF
@@ -60,6 +64,7 @@ def test_badRawChunkHeader():
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00')
     with pytest.raises(Exception):
         comp.decompress(compressed)
+
 
 def test_flagWithNoData():
     """
@@ -73,6 +78,7 @@ def test_flagWithNoData():
     with pytest.raises(Exception):
         comp.decompress(compressed)
 
+
 def test_badHeaderSignature():
     """
     The header signature must be 0b011
@@ -84,6 +90,7 @@ def test_badHeaderSignature():
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00\x3C')
     with pytest.raises(Exception):
         comp.decompress(compressed)
+
 
 def test_incompleteCopyToken():
     """
