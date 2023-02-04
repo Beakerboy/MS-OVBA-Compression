@@ -13,7 +13,7 @@ that is slightly different than is produced using it's own documented procedure.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install MS_OVBA_Compression.
 
 ```bash
 pip install MS_OVBA_Compression
