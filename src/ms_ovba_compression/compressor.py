@@ -1,6 +1,8 @@
 from MS_OVBA_Compression.helpers import *
 
 class Compressor:
+
+
     def __init__(self, endian='little'):
         self.endian = endian
 
