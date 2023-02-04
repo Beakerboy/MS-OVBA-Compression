@@ -19,7 +19,7 @@ class Decompressor:
         # The compressed container must begin with the byte \x01
         if compressedContainer[0] != 0x01:
             message = ("The container signature byte must be \\x01, not "
-                       str(compressedContainer[0]) + ".")
+                       + str(compressedContainer[0]) + ".")
             raise Exception(message)
         # Pop off the signature byte. Everything else is compressed chunks
         chunks = compressedContainer[1:]
