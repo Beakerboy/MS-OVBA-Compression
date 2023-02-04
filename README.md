@@ -21,15 +21,14 @@ All inputs and outputs are bytes objects. This library does not operate on files
 from MS_OVBA_Copression.compressor import Compressor
 from MS_OVBA_Copression.decompressor import Decompressor
 
-# returns b'\x01\x19\xB0\x00abcdefgh\x00ijklmnop\x00qrstuv.\x2E'
+# returns b'\x01\x19\xB0\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
 comp = Compressor()
 comp.compress(input)
 
 # returns b"#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa"
 comp = Decompressor()
-expected = b"#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa"
-compressed = b'\x01\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75\x76\x10\x77\x78\x79\x7A\x00\x3C'
+compressed = b'\x01/\xB0\x00#aaabcde\x82f\x00paghij\x018\x08akl\x000mnop\x06q\x02p\x04\x10rstuv\x10wxyz\x00<'
 comp.decompress(compressed)
 
 
