@@ -30,7 +30,7 @@ class Decompressor:
             self.uncompressedData += self.decompressChunk(compressedChunk)
             # if there are more chunks, this chunk must be 4096 bytes uncompressed
 
-    def unpackHeader(self, header):
+    def unpackHeader(self, compressedHeader):
         length = len(compressedHeader)
         if length != 2:
             raise Exception("The header must be two bytes. Given " + str(length) + ".")
@@ -46,29 +46,6 @@ class Decompressor:
         if signature != 3:
             raise Exception("Chunk signature must be three. Value is " + str(signature) + ".")
         return compressed, length
-
-    def setCompressedHeader(self, compressedHeader):
-        """
-        The compressed header is two bytes. 12 signature byes followed by \011 and a single bit that is 0b1 if compressed
-        The documentation differs from real-world MS implementation. It's possible that enian-ness affects the packing order of these bits.
-        """
-        length = len(compressedHeader)
-        if length != 2:
-            raise Exception("The header must be two bytes. Given " + str(length) + ".")
-        intHeader = int.from_bytes(compressedHeader, "little")
-        # data is compressed if the least significat bit is 0b1
-        self.compressed = (intHeader & 0x8000) >> 15
-
-        # the 12 most significant bits is three less than the chunk size
-        self.compressedChunkSize = (intHeader & 0x0FFF) + 3
-        if not(self.compressed) and self.compressedChunkSize != 4096:
-            raise Exception("If uncompressed, chunk must be 4096 bytes.")
-        self.compressedChunkSignature = (intHeader & 0x7000) >> 12
-        if self.compressedChunkSignature != 3:
-            raise Exception("Chunk signature must be three. Value is " + str(self.compressedChunkSignature) + ".")
-
-    def getCompressedChunkSize(self):
-        return self.compressedChunkSize
 
     def decompressChunk(self, compressedChunk):
         """
