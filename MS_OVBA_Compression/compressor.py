@@ -46,7 +46,7 @@ class Compressor:
         # if the compression algorithm produces a chunk too large, use raw.
         if chunkSize > 4096:
             chunkSize = 4096
-            compressedChunk = data.ljust(4096, '\0')
+            compressedChunk = data.ljust(4096, b'\x00')
             compressAndSig = 0x3000
         header = compressAndSig | chunkSize
         compressedChunk = header.to_bytes(2, self.endian) + compressedChunk
