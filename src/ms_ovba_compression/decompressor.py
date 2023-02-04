@@ -71,7 +71,7 @@ class Decompressor:
         signature = (intHeader & 0x7000) >> 12
         if signature != 3:
             message = ("Chunk signature must be three. Value is "
-                       str(signature) + ".")
+                       + str(signature) + ".")
             raise Exception(message)
         return compressed, length
 
@@ -112,8 +112,8 @@ class Decompressor:
                     # string. There better be 2 bytes or we're in trouble.
                     if len(compressedChunk) < 2:
                         message = ("Copy Token does not exist. FlagToken was "
-                            str(flagToken) + " and decompressed chunk is "
-                            self.uncompressedData + '.')
+                            + str(flagToken) + " and decompressed chunk is "
+                            + self.uncompressedData + '.')
                         raise Exception(message)
                     help = copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck
