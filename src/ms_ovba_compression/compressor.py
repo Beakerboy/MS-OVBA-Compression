@@ -1,6 +1,6 @@
-from MS_OVBA_Compression.helpers import *
+from ms_ovba_compression.helpers import *
 
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
 class Compressor:
 
     def __init__(self, endian='little'):
