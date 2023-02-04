@@ -1,4 +1,4 @@
-from MS_OVBA_Compression.helpers import *
+from ms_ovba_compression.helpers import *
 
 
 class Decompressor:
