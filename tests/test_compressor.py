@@ -1,4 +1,3 @@
-import pytest
 from ms_ovba_compression.compressor import Compressor
 
 
@@ -11,8 +10,8 @@ def test_unableToCompress():
 
 
 def test_maxCompression():
-    input = (b'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-             + b'aaaaaaaaa')
+    input = (b'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+             + b'aaaaaaaaaa')
     comp = Compressor()
     expected = b'\x01\x03\xB0\x02\x61\x45\x00'
     assert comp.compress(input) == expected
