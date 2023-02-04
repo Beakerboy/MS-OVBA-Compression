@@ -48,28 +48,40 @@ class Decompressor:
         """
         uncompressedChunk = b''
         while len(compressedChunk) > 0:
-          #flag is one byte
-          flagToken = data[0]
-          compressedChunk = compressedChunk[1:]
-          if len(compressedChunk) == 0:
-              raise Exception("There must be at least one token in each TokenSequence.")
-          flagMask = 1
-          for i in range(8):
-              flag = flagToken & flagMask
-              flagMask = flagMask << 1
-              if flag == 0:
-                  if len(compressedChunk) > 0:
-                      uncompressedChunk += compressedChunk[0]
-                      compressedChunk = compressedChunk[1:]
-              else:
-                  if len(compressedChunk) < 2:
-                      raise Exception("Copy Token does not exist. FlagToken was " + str(flagToken) + " and decompressed chunk is " + self.uncompressedData + '.')
-                  help = copyTokenHelp(len(uncompressedData))
-                  copyToken = unpackCopyToken(struct.unpack("<H", data[:2])[0], help)  # Note this this will always be little endian.
-                  compressedChunk = compressedChunk[2:]
-                  
-                  for i in range(copyToken["length"]):
-                      offset = copyToken["offset"]
-                      length = len(uncompressedData)
-                      uncompressedData += uncompressedData[-1 * offset]
+            # The Flag Byte is one byte. pop it off
+            flagByte = data[0]
+            compressedChunk = compressedChunk[1:]
+
+            # If we have a flag byte, we better have data to go with it.
+            if len(compressedChunk) == 0:
+                raise Exception("There must be at least one token in each TokenSequence.")
+            flagMask = 1
+            for i in range(8):
+                # Extract Flag bit from the token with the mask
+                flagBit = flagByte & flagMask
+                
+                if flagBit == 0:
+                    # If the flag bit is zero, no compression ocurred, so just move the byte over.
+                    if len(compressedChunk) > 0:
+                        uncompressedChunk += compressedChunk[0]
+                        compressedChunk = compressedChunk[1:]
+                else:
+                    # If the flag bit is one, grab the 2 byte copy token and determine the offset and length of the replacement string.
+                    # There better be 2 bytes or we're in trouble.
+                    if len(compressedChunk) < 2:
+                        raise Exception("Copy Token does not exist. FlagToken was " + str(flagToken) + " and decompressed chunk is " + self.uncompressedData + '.')
+                    help = copyTokenHelp(len(uncompressedData))
+                    # The copy Token is always packed into the compressed chuck little endian
+                    copyToken = struct.unpack("<H", data[:2])
+                    copyTokenData = unpackCopyToken(copyToken, help)
+                    compressedChunk = compressedChunk[2:]
+
+                    for i in range(copyTokenData["length"]):
+                        # Copy data from the uncompressed chunk, {offset} bytes away, {length} number of times.
+                        # Note that this can mean that we could possibly copy new data multiple times, ie. offset 1 length 7
+                        offset = copyTokenData["offset"]
+                        length = len(uncompressedData)
+                        uncompressedData += uncompressedData[-1 * offset]
+                # Move the mask for the next round
+                flagMask = flagMask << 1
         return self.uncompressedData
