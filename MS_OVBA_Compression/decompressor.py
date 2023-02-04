@@ -3,24 +3,40 @@ class Decompressor:
 
     def __init__(self, endian = 'little'):
         self.endian = endian
-        self.uncompressedData = b''
 
     def decompress(self, compressedContainer):
+        uncompressedData = b''
+        # The compressed container must begin with the byte \x01
         if compressedContainer[0] != 0x01:
             raise Exception("The container signature byte must be \\x01, not " + str(compressedContainer[0]) + ".")
+        # Pop off the signature byte. Everything else is compressed chunks
         chunks = compressedContainer[1:]
         while len(chunks) > 0:
+            # The first two bytes of each chunk is the header. It will tell us how long the compressed data is in this chunk.
+            # All chunks must be 4096 bytes uncompressed except for the last chunk.
             header = chunks[0:2]
             compressed, length = self.unpackHeader(header)
+
+            # The unpackHeader method gives us the chunk length. the data potion is two less than that.
             compressedDataLength = length - 2
+
+            # If we have less data then we are supposed to, we have a problem.
             if len(chunks) < length:
                 raise Exception("Expecting " + str(length - 2) + " data bytes, but given " + str(len(chunks - 2)) + ".")
+
+            # Split out the compresseddata from the chunk buffer.
             compressedChunk = chunks[2:compressedDataLength + 2]
+
+            # Pop off the data we are working on from the buffer
             chunks = chunks[length + 2:]
             decompressedChunk = self.decompressChunk(compressedChunk)
-            self.uncompressedData += decompressedChunk
+            uncompressedData += decompressedChunk
+
+            # If the last chunk is less than 4096 bytes, there better not be anything left in the buffer.
+            # Should this raise a warning instead?
             if len(decompressedChunk) < 4096 and len(chunks) > 0:
-                raise Exception("The provided Compressed Container is too long.")
+                raise Exception("The provided compressed container is too long.")
+        return uncompressedData
 
     def unpackHeader(self, compressedHeader):
         length = len(compressedHeader)
