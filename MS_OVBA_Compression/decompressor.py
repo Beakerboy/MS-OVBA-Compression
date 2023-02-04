@@ -39,6 +39,8 @@ class Decompressor:
         return uncompressedData
 
     def _unpackHeader(self, compressedHeader):
+        # Need to find out if this byte order is endian dependent. It seems the real world data had the bits packed little
+        # endian and then the resulting two bytes packed little endian into the binary file.
         intHeader = int.from_bytes(compressedHeader, "little")
         # data is compressed if the least significat bit is 0b1
         compressed = (intHeader & 0x8000) >> 15
