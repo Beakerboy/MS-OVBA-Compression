@@ -21,7 +21,7 @@ def test_badSignatureByte():
                   + b'\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00\x30'
                   + b'\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74\x75'
                   + b'\x76\x10\x77\x78\x79\x7A\x00\x3C')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
 
 def test_containerTooShort():
@@ -33,7 +33,7 @@ def test_containerTooShort():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
 
 def test_containerTooLong():
@@ -45,7 +45,7 @@ def test_containerTooLong():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00\3C\x3F\xFF')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
 
 
@@ -58,7 +58,7 @@ def test_badRawChunkHeader():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
 
 def test_flagWithNoData():
@@ -70,7 +70,7 @@ def test_flagWithNoData():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x10')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
 
 def test_badHeaderSignature():
@@ -82,7 +82,7 @@ def test_badHeaderSignature():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x10\x77\x78\x79\x7A\x00\x3C')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
 
 def test_incompleteCopyToken():
@@ -94,5 +94,5 @@ def test_incompleteCopyToken():
                   + b'\x00\x70\x61\x67\x68\x69\x6A\x01\x38\x08\x61\x6B\x6C\x00'
                   + b'\x30\x6D\x6E\x6F\x70\x06\x71\x02\x70\x04\x10\x72\x73\x74'
                   + b'\x75\x76\x01\x77')
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         comp.decompress(compressed)
