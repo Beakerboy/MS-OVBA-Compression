@@ -63,7 +63,7 @@ class Decompressor:
                 if flagBit == 0:
                     # If the flag bit is zero, no compression ocurred, so just move the byte over.
                     if len(compressedChunk) > 0:
-                        uncompressedChunk += compressedChunk[0]
+                        uncompressedChunk += compressedChunk[0].to_bytes(1, "little")
                         compressedChunk = compressedChunk[1:]
                 else:
                     # If the flag bit is one, grab the 2 byte copy token and determine the offset and length of the replacement string.
@@ -81,7 +81,7 @@ class Decompressor:
                         # Note that this can mean that we could possibly copy new data multiple times, ie. offset 1 length 7
                         offset = copyTokenData["offset"]
                         length = len(uncompressedData)
-                        uncompressedData += uncompressedData[-1 * offset]
+                        uncompressedData += uncompressedData[-1 * offset].to_bytes(1, "little")
                 # Move the mask for the next round
                 flagMask = flagMask << 1
         return self.uncompressedData
