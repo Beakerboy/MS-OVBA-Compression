@@ -70,17 +70,15 @@ class Decompressor:
                     # There better be 2 bytes or we're in trouble.
                     if len(compressedChunk) < 2:
                         raise Exception("Copy Token does not exist. FlagToken was " + str(flagToken) + " and decompressed chunk is " + self.uncompressedData + '.')
-                    help = copyTokenHelp(len(uncompressedData))
+                    help = copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck little endian
                     copyToken = struct.unpack("<H", data[:2])
                     copyTokenData = unpackCopyToken(copyToken, help)
                     compressedChunk = compressedChunk[2:]
-
+                    offset = copyTokenData["offset"]
                     for i in range(copyTokenData["length"]):
                         # Copy data from the uncompressed chunk, {offset} bytes away, {length} number of times.
                         # Note that this can mean that we could possibly copy new data multiple times, ie. offset 1 length 7
-                        offset = copyTokenData["offset"]
-                        length = len(uncompressedData)
                         uncompressedChunk += uncompressedChunk[-1 * offset].to_bytes(1, "little")
                 # Move the mask for the next round
                 flagMask = flagMask << 1
