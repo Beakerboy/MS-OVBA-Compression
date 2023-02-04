@@ -17,7 +17,7 @@ def test_badSignatureByte():
     with pytest.raises(Exception) as e_info:
         result = comp.decompress(compressed)
 
- def test_containerTooShort():
+def test_containerTooShort():
     """
     The container must have a signature byte
     """
