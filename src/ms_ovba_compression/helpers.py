@@ -13,6 +13,7 @@ def copyTokenHelp(difference):
         "maxLength": maxLength
     }
 
+
 def unpackCopyToken(copyToken, help):
     """
     calculate an offset and length from a 16 bit copytoken
@@ -26,6 +27,7 @@ def unpackCopyToken(copyToken, help):
         "offset": offset
     }
 
+
 def packCopyToken(length, offset, help):
     """
     Create the copy token from the length, offset, and currect position
@@ -36,6 +38,7 @@ def packCopyToken(length, offset, help):
     temp2 = 16 - help["bitCount"]
     temp3 = length - 3
     return (temp1 << temp2) | temp3
+
 
 def ceilLog2(int):
     i = 4
