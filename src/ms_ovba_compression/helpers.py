@@ -1,6 +1,7 @@
 def copyTokenHelp(difference):
     """
-    Calculate a lengthMask, offsetMask, and bitCount from the length of the uncompressedData
+    Calculate a lengthMask, offsetMask, and bitCount from the length of the
+    uncompressedData.
     """
     bitCount = ceilLog2(difference)
     lengthMask = 0xFFFF >> bitCount
