@@ -51,7 +51,7 @@ class Compressor:
         # Buffer of compressed data.
         compressedChunk = b''
 
-        # While there is data in the uncompressed buffer, build a token 
+        # While there is data in the uncompressed buffer, build a token
         # sequence and compress it and add the compressed sequence to the
         # compressed buffer.
         while len(self._uncompressedData) > 0:
