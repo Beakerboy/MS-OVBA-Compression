@@ -5,15 +5,6 @@ class Decompressor:
     def __init__(self, endian = 'little'):
         self.endian = endian
         self.uncompressedData = b''
-        
-        # The chunk after compression
-        self.compressedChunk = b''
-
-        #the size in bytes of the compressed chunk
-        self.compressedChunkSize = 0
-
-        # is the data compressed?
-        self.compressed = 1
 
     def decompress(self, compressedContainer):
         if compressedContainer[0] != 0x01:
