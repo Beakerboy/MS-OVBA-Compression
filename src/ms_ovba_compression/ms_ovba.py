@@ -111,11 +111,11 @@ class MsOvba:
                     if len(compressedChunk) < 2:
                         message = "Copy Token does not exist."
                         raise Exception(message)
-                    help = helpers.copyTokenHelp(len(uncompressedChunk))
+                    help = MsOvba.copyTokenHelp(len(uncompressedChunk))
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
                     copyToken = int.from_bytes(compressedChunk[:2], "little")
-                    copyTokenData = helpers.unpackCopyToken(copyToken, help)
+                    copyTokenData = MsOvba.unpackCopyToken(copyToken, help)
                     compressedChunk = compressedChunk[2:]
                     offset = copyTokenData["offset"]
 
@@ -251,8 +251,8 @@ class MsOvba:
             # Pack the offset and length data into the CopyToken, then pack
             # the token little-endian.
             difference = len(self._activeChunk) - len(self._uncompressedData)
-            help = ms_ovba.copyTokenHelp(difference)
-            tokenInt = ms_ovba.packCopyToken(length, offset, help)
+            help = MsOvba.copyTokenHelp(difference)
+            tokenInt = MsOvba.packCopyToken(length, offset, help)
             packedToken = tokenInt.to_bytes(2, "little")
 
             # Update the uncompressed buffer by removing the length we were
@@ -294,7 +294,7 @@ class MsOvba:
 
         if bestLength >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
-            help = ms_ovba.copyTokenHelp(difference)
+            help = MsOvba.copyTokenHelp(difference)
             maximumLength = help["maxLength"]
             length = min(maximumLength, bestLength)
             offset = (len(self._activeChunk) - len(self._uncompressedData)
@@ -309,7 +309,7 @@ class MsOvba:
         Calculate a lengthMask, offsetMask, and bitCount from the length of the
         uncompressedData.
         """
-        bitCount = ceilLog2(difference)
+        bitCount = MsOvba.ceilLog2(difference)
         lengthMask = 0xFFFF >> bitCount
         offsetMask = ~lengthMask & 0xFFFF
         maxLength = 0xFFFF << bitCount + 3
