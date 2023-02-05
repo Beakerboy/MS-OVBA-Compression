@@ -25,18 +25,17 @@ amount of normalization before compression. If you are interested in writing or 
 [Beakerboy/vbaProject-Compiler](https://github.com/Beakerboy/vbaProject-Compiler).
 
 ```python
-from ms_ovba_compression.compressor import Compressor
-from ms_ovba_compression.decompressor import Decompressor
+from ms_ovba_compression.ms_ovba import MsOvba
 
 # returns b'\x01\x19°\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
-comp = Compressor()
-comp.compress(input)
+ms_ovba = MsOVBA()
+ms_ovba.compress(input)
 
 # returns b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-comp = Decompressor()
+ms_ovba = MsOVBA()
 compressed = b'\x01/°\x00#aaabcde²f\x00paghij\x018\x08akl\x000mnop\x06q\x02p\x04\x10rstuv\x10wxyz\x00<'
-comp.decompress(compressed)
+ms_ovba.decompress(compressed)
 
 ```
 The objects can be initialized to indicate the endianness if the default little-endian is not desired. However, having never seen real world big-endian packed data
@@ -47,8 +46,8 @@ means this feature is untested.
 # or
 # b'\x01\x01—\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
-comp = Compressor("big")
-comp.compress(input)
+ms_ovba = MsOvba("big")
+ms_ovba.compress(input)
 
 ```
 
