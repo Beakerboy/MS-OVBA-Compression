@@ -1,10 +1,8 @@
-from ms_ovba_compression.compressor import Compressor
-from ms_ovba_compression.decompressor import Decompressor
+from ms_ovba_compression.ms_ovba import MsOvba
 
 
 def test_normalCompresson():
     input = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-    comp = Compressor()
-    result = comp.compress(input)
-    decomp = Decompressor()
-    assert decomp.decompress(result) == input
+    ms_ovba = MsOVBA()
+    result = ms_ovba.compress(input)
+    assert ms_ovba.decompress(result) == input
