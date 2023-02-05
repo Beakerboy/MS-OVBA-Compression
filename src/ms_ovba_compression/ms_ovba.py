@@ -131,7 +131,6 @@ class MsOvba:
                 flagMask = flagMask << 1
         return uncompressedChunk
 
-
     def compress(self, data):
         """
         Compress a bytearray
@@ -302,7 +301,6 @@ class MsOvba:
 
         return offset, length
 
-
     @staticmethod
     def copyTokenHelp(difference):
         """
@@ -320,7 +318,6 @@ class MsOvba:
             "maxLength": maxLength
         }
 
-
     @staticmethod
     def unpackCopyToken(copyToken, help):
         """
@@ -335,7 +332,6 @@ class MsOvba:
             "offset": offset
         }
 
-
     @staticmethod
     def packCopyToken(length, offset, help):
         """
@@ -346,7 +342,6 @@ class MsOvba:
         temp2 = 16 - help["bitCount"]
         temp3 = length - 3
         return (temp1 << temp2) | temp3
-
 
     @staticmethod
     def ceilLog2(int):
