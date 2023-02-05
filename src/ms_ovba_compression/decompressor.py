@@ -1,7 +1,7 @@
 import ms_ovba_compression.helpers as helpers
 
 
-class Decompressor:
+class ms_ovba:
 
     def __init__(self, endian='little'):
         self._endian = endian
