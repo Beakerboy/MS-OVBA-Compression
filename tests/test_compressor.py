@@ -31,8 +31,8 @@ def test_longPoorCompression():
     for j in range(72):
         data += i.to_bytes(1, "little") + j.to_bytes(1, "little")
     assert len(data) < 4096
-    comp = Compressor()
-    result = comp.compress(data)
+    ms_ovba = MsOvba()
+    result = ms_ovba.compress(data)
     # the length is 1 container signature byte, 2 header bytes, and the
     # original data padded to 4096 bytes
     assert len(result) == 4099
