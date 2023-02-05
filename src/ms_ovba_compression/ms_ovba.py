@@ -1,4 +1,4 @@
-class ms_ovba:
+class MsOvba:
 
     def __init__(self, endian='little'):
         self._endian = endian
