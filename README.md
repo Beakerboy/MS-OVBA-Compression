@@ -33,7 +33,7 @@ ms_ovba = MsOVBA()
 ms_ovba.compress(input)
 
 # returns b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
-ms_ovba = MsOVBA()
+ms_ovba = MsOvba()
 compressed = b'\x01/°\x00#aaabcde²f\x00paghij\x018\x08akl\x000mnop\x06q\x02p\x04\x10rstuv\x10wxyz\x00<'
 ms_ovba.decompress(compressed)
 
