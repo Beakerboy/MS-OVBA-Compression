@@ -303,21 +303,22 @@ class MsOvba:
         return offset, length
 
 
+    @staticmethod
     def copyTokenHelp(difference):
-    """
-    Calculate a lengthMask, offsetMask, and bitCount from the length of the
-    uncompressedData.
-    """
-    bitCount = ceilLog2(difference)
-    lengthMask = 0xFFFF >> bitCount
-    offsetMask = ~lengthMask & 0xFFFF
-    maxLength = 0xFFFF << bitCount + 3
-    return {
-        "lengthMask": lengthMask,
-        "offsetMask": offsetMask,
-        "bitCount": bitCount,
-        "maxLength": maxLength
-    }
+        """
+        Calculate a lengthMask, offsetMask, and bitCount from the length of the
+        uncompressedData.
+        """
+        bitCount = ceilLog2(difference)
+        lengthMask = 0xFFFF >> bitCount
+        offsetMask = ~lengthMask & 0xFFFF
+        maxLength = 0xFFFF << bitCount + 3
+        return {
+            "lengthMask": lengthMask,
+            "offsetMask": offsetMask,
+            "bitCount": bitCount,
+            "maxLength": maxLength
+        }
 
 
     @staticmethod
