@@ -1,6 +1,3 @@
-import ms_ovba_compression.helpers as helpers
-
-
 class ms_ovba:
 
     def __init__(self, endian='little'):
@@ -254,8 +251,8 @@ class ms_ovba:
             # Pack the offset and length data into the CopyToken, then pack
             # the token little-endian.
             difference = len(self._activeChunk) - len(self._uncompressedData)
-            help = helpers.copyTokenHelp(difference)
-            tokenInt = helpers.packCopyToken(length, offset, help)
+            help = ms_ovba.copyTokenHelp(difference)
+            tokenInt = ms_ovba.packCopyToken(length, offset, help)
             packedToken = tokenInt.to_bytes(2, "little")
 
             # Update the uncompressed buffer by removing the length we were
@@ -297,10 +294,62 @@ class ms_ovba:
 
         if bestLength >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
-            help = helpers.copyTokenHelp(difference)
+            help = ms_ovba.copyTokenHelp(difference)
             maximumLength = help["maxLength"]
             length = min(maximumLength, bestLength)
             offset = (len(self._activeChunk) - len(self._uncompressedData)
                       - bestCandidate)
 
         return offset, length
+
+
+    def copyTokenHelp(difference):
+    """
+    Calculate a lengthMask, offsetMask, and bitCount from the length of the
+    uncompressedData.
+    """
+    bitCount = ceilLog2(difference)
+    lengthMask = 0xFFFF >> bitCount
+    offsetMask = ~lengthMask & 0xFFFF
+    maxLength = 0xFFFF << bitCount + 3
+    return {
+        "lengthMask": lengthMask,
+        "offsetMask": offsetMask,
+        "bitCount": bitCount,
+        "maxLength": maxLength
+    }
+
+
+    @staticmethod
+    def unpackCopyToken(copyToken, help):
+        """
+        calculate an offset and length from a 16 bit copytoken
+        """
+        length = (copyToken & help["lengthMask"]) + 3
+        temp1 = copyToken & help["offsetMask"]
+        temp2 = 16 - help["bitCount"]
+        offset = (temp1 >> temp2) + 1
+        return {
+            "length": length,
+            "offset": offset
+        }
+
+
+    @staticmethod
+    def packCopyToken(length, offset, help):
+        """
+        Create the copy token from the length, offset, and currect position
+        return bytes
+        """
+        temp1 = offset - 1
+        temp2 = 16 - help["bitCount"]
+        temp3 = length - 3
+        return (temp1 << temp2) | temp3
+
+
+    @staticmethod
+    def ceilLog2(int):
+        i = 4
+        while 2 ** i < int:
+            i += 1
+        return i
