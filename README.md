@@ -29,7 +29,7 @@ from ms_ovba_compression.ms_ovba import MsOvba
 
 # returns b'\x01\x19°\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
-ms_ovba = MsOVBA()
+ms_ovba = MsOvba()
 ms_ovba.compress(input)
 
 # returns b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
