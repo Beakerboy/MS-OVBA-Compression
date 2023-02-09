@@ -101,3 +101,11 @@ def test_incompleteCopyToken():
                   + b'\x75\x76\x01\x77')
     with pytest.raises(Exception):
         ms_ovba.decompress(compressed)
+
+
+def test_unableToCompressBig():
+    expected = b'abcdefghijklmnopqrstuv.'
+    ms_ovba = MsOvba("big")
+    input = (b'\x01\xB0\x19\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
+                + b'\x6B\x6C\x6D\x6E\x6F\x70\x00\x71\x72\x73\x74\x75\x76\x2E')
+    assert ms_ovba.decompress(input) == expected
