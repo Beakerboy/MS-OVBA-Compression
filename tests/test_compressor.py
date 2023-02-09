@@ -38,3 +38,10 @@ def test_longPoorCompression():
     assert len(result) == 4099
     # The resulting chunk header will be 0x3FFF
     assert result[2] & 0xF0 == 0x30
+
+def test_unableToCompressBig():
+    input = b'abcdefghijklmnopqrstuv.'
+    ms_ovba = MsOvba("big")
+    expected = (b'\x01\xB0\x19\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
+                + b'\x6B\x6C\x6D\x6E\x6F\x70\x00\x71\x72\x73\x74\x75\x76\x2E')
+    assert ms_ovba.compress(input) == expected
