@@ -16,6 +16,11 @@ def test_maxCompression():
     expected = b'\x01\x03\xB0\x02\x61\x45\x00'
     assert ms_ovba.compress(input) == expected
 
+def test_normalCompresson():
+    input = b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
+    ms_ovba = MsOvba()
+    expected = b'\x01\x03\xB0\x02\x61\x45\x00'
+    assert ms_ovba.compress(input) == expected
 
 def test_longPoorCompression():
     """
