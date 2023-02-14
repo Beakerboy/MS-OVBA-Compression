@@ -6,6 +6,7 @@ Page 110 provides This as the uncompressed input:
     77 78 79 7A 61 61 61
 
 And this as the compressed output:
+
     01 2F B0 00 23 61 61 61 62 63 64 65 82 66 00 70 61 67 68 69 6A 01 38 08 61 6B 6C 00 30 6D 6E 6F 70 06 71 02 70 04 10 72 73 74 75 76 10 77 78 79
     7A 00 3C
 
