@@ -34,7 +34,8 @@ the final copy token.
 I’ll work the 3rd token sequence by hand to demonstrate
 what is expected given my understanding of the pseudo-code.
 
-At this point in the compressing a token sequence function, we ha e the following state variables:
+At this point in the compressing a token sequence function, we
+have the following state variables:
 
     index=3
     compressedcurrent=26
