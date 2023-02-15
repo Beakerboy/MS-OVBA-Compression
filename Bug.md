@@ -58,7 +58,7 @@ so 5, and the length is 3.
 Now we call CopyTokenHelp:
 
     difference = 24 - 0 = 24
-    BitCount = max⌈log₂(24)⌉, 4) = max(⌈4.58⌉, 4) = 5
+    BitCount = max(⌈log₂(24)⌉, 4) = max(⌈4.58⌉, 4) = 5
     LengthMask = 0xFFFF >> 5 = 0x07FF
     OffsetMask = ~0x07FF = 0xF800
  
@@ -67,7 +67,7 @@ And a call to PackCopytoken:
     temp1 = Offset - 1 = 4
     temp2 = 16 - BitCount = 11
     temp3 = Length - 3 = 0
-    Token = (temp1 LEFT SHIFT BY temp2) BITWISE OR temp3
+    Token = (temp1 >> temp2) | temp3
           = (4 << 11) | 0 = 0x0004 << 11 = 0x2000
 
 So we see the token should be 0x2000 instead of the 0x3000
