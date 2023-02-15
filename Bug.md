@@ -45,7 +45,7 @@ Running through the matching algorithm, we set candidate to
 decompressedCurrent-1, so 23. Byte at 23 is 6C, while the byte
 at 24 is 61, so we decrement the candidate. The same occurs until
 candidate is 21. At this point the inner while loop iterates once
-to give is a length of 1. We decrement candidate again and again
+to give us a length of 1. We decrement candidate again and again
 find a match, this time of length 2, so this is the new BestLength.
 We decrement Candidate again (to 19) and find a match of length three.
 We continue to decrement the candidate and find other length 3 matches,
