@@ -15,8 +15,9 @@ And this as the compressed output:
 If we split the final output into token sequences and
 swap the little-endien encoded words:
 
-Container signature = 01
-chunk header = B0 2F
+    Container signature = 01
+    chunk header = B0 2F
+
 Token sequences. The two-byte copy tokens are distinguished
 from literal tokens with brackets.
 
