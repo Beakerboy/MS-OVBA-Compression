@@ -279,7 +279,7 @@ class MsOvba:
         i = 1
         pos = len(self._activeChunk) - len(self._uncompressedData)
         candidate = self._sawtooth(pos, i)
-        while candidate >= 0:
+        while pos - i >= 0:
             C = candidate
             D = len(self._activeChunk) - len(self._uncompressedData)
             L = 0
@@ -370,4 +370,4 @@ class MsOvba:
 
     def _sawtooth(self, current, i) -> int:
         offset = (i // 8) * 8 + 8 - (i % 8) - 1
-        return current - offset
+        return max(current - offset, 0)
