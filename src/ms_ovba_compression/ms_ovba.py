@@ -353,21 +353,11 @@ class MsOvba:
             i += 1
         return i
 
-    def _no_translation(self, current, i) -> int:
-        return len(self._activeChunk) - len(self._uncompressedData) - i
-
     def _translate_candidate(self, current, i) -> int:
         """
-        go back to the nearest word and work forwards
+        Instead of working sequentially backwards through the
+        uncompressed chunk, we go back 8, then forward 7
+        then back 16, forward 7, and repeat.
         """
-        current_int = current // 4
-        current_mod = current % 4
-        int_part = (current - i) // 4
-        mod_part = (current - i) % 4
-        if int_part == current_int:
-            return current_int * 4 + current_mod - 1 - mod_part
-        return int_part * 4 + 3 - mod_part
-
-    def _sawtooth(self, current, i) -> int:
         offset = ((i-1) // 8) * 8 + 8 - ((i-1) % 8)
         return max(current - offset, 0)
