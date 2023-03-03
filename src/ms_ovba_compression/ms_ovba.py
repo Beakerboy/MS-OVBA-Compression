@@ -276,7 +276,7 @@ class MsOvba:
         length = 0
         bestLength = 0
         bestCandidate = 0
-        i = -1
+        i = 1
         pos = len(self._activeChunk) - len(self._uncompressedData)
         candidate = self._no_translation(pos, i)
         while candidate >= 0:
