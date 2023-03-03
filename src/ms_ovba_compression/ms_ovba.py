@@ -292,7 +292,7 @@ class MsOvba:
                 bestLength = L
                 bestCandidate = candidate
             i -= 1
-            candidate = self._no_translation(pos, i) 
+            candidate = self._no_translation(pos, i)
 
         if bestLength >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
@@ -357,4 +357,10 @@ class MsOvba:
         return len(self._activeChunk) - len(self._uncompressedData) - i
 
     def _translate_match(self, current, i):
-        int_part = current // 4
+        current_int = current // 4
+        current_mod = current % 4
+        int_part = (current - i) // 4
+        mod_part = (current - i) % 4
+        if int_part == current_int:
+            return current_int * 4 + current_mod - 1 - mod_part
+        return current_int * 4 + 3 - mod_part
