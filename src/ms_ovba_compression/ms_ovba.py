@@ -276,8 +276,10 @@ class MsOvba:
         length = 0
         bestLength = 0
         bestCandidate = 0
-        candidate = len(self._activeChunk) - len(self._uncompressedData) - 1
-        while candidate >= 0:
+        i = 1
+        pos = len(self._activeChunk) - len(self._uncompressedData)
+        candidate = self._translate_candidate(pos, i)
+        while pos - i >= 0:
             C = candidate
             D = len(self._activeChunk) - len(self._uncompressedData)
             L = 0
@@ -289,7 +291,8 @@ class MsOvba:
             if L > bestLength:
                 bestLength = L
                 bestCandidate = candidate
-            candidate -= 1
+            i += 1
+            candidate = self._translate_candidate(pos, i)
 
         if bestLength >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
@@ -349,3 +352,12 @@ class MsOvba:
         while 2 ** i < int:
             i += 1
         return i
+
+    def _translate_candidate(self, current, i) -> int:
+        """
+        Instead of working sequentially backwards through the
+        uncompressed chunk, we go back 8, then forward 7
+        then back 16, forward 7, and repeat.
+        """
+        offset = ((i-1) // 8) * 8 + 8 - ((i-1) % 8)
+        return max(current - offset, 0)
