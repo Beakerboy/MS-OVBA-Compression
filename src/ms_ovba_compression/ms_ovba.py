@@ -278,7 +278,7 @@ class MsOvba:
         bestCandidate = 0
         i = 1
         pos = len(self._activeChunk) - len(self._uncompressedData)
-        candidate = self._sawtooth(pos, i)
+        candidate = self._translate_candidate(pos, i)
         while pos - i >= 0:
             C = candidate
             D = len(self._activeChunk) - len(self._uncompressedData)
@@ -292,7 +292,7 @@ class MsOvba:
                 bestLength = L
                 bestCandidate = candidate
             i += 1
-            candidate = self._sawtooth(pos, i)
+            candidate = self._translate_candidate(pos, i)
 
         if bestLength >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
