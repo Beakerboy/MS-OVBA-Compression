@@ -278,7 +278,7 @@ class MsOvba:
         bestCandidate = 0
         i = 1
         pos = len(self._activeChunk) - len(self._uncompressedData)
-        candidate = self._no_translation(pos, i)
+        candidate = self._sawtooth(pos, i)
         while candidate >= 0:
             C = candidate
             D = len(self._activeChunk) - len(self._uncompressedData)
@@ -292,7 +292,7 @@ class MsOvba:
                 bestLength = L
                 bestCandidate = candidate
             i += 1
-            candidate = self._no_translation(pos, i)
+            candidate = self._sawtooth(pos, i)
 
         if bestLength >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
@@ -357,6 +357,9 @@ class MsOvba:
         return len(self._activeChunk) - len(self._uncompressedData) - i
 
     def _translate_candidate(self, current, i) -> int:
+        """
+        go back to the nearest word and work forwards
+        """
         current_int = current // 4
         current_mod = current % 4
         int_part = (current - i) // 4
@@ -364,3 +367,7 @@ class MsOvba:
         if int_part == current_int:
             return current_int * 4 + current_mod - 1 - mod_part
         return int_part * 4 + 3 - mod_part
+
+   def _sawtooth(self, current, i) -> int:
+        offset = (i // 8) * 8 + 8 - (i % 8) - 1
+        return current - offset
