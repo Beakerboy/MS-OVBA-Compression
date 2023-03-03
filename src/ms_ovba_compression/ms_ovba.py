@@ -291,7 +291,7 @@ class MsOvba:
             if L > bestLength:
                 bestLength = L
                 bestCandidate = candidate
-            i -= 1
+            i += 1
             candidate = self._no_translation(pos, i)
 
         if bestLength >= 3:
