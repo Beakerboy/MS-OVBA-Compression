@@ -368,6 +368,6 @@ class MsOvba:
             return current_int * 4 + current_mod - 1 - mod_part
         return int_part * 4 + 3 - mod_part
 
-   def _sawtooth(self, current, i) -> int:
+    def _sawtooth(self, current, i) -> int:
         offset = (i // 8) * 8 + 8 - (i % 8) - 1
         return current - offset
