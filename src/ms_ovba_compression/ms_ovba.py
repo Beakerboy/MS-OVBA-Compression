@@ -369,5 +369,5 @@ class MsOvba:
         return int_part * 4 + 3 - mod_part
 
     def _sawtooth(self, current, i) -> int:
-        offset = (i // 8) * 8 + 8 - (i % 8) - 1
+        offset = (i // 8) * 8 + 8 - (i % 8) + 1
         return max(current - offset, 0)
