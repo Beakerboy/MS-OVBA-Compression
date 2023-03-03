@@ -277,7 +277,7 @@ class MsOvba:
         bestLength = 0
         bestCandidate = 0
         candidate = len(self._activeChunk) - len(self._uncompressedData) - 1
-        while pos - i >= 0:
+        while candidate >= 0:
             C = candidate
             D = len(self._activeChunk) - len(self._uncompressedData)
             L = 0
