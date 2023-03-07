@@ -286,7 +286,7 @@ class MsOvba:
                 C += 1
                 D += 1
                 L += 1
-            if L > bestLength:
+            if L > best_length:
                 best_length = L
                 best_candidate = candidate
             candidate -= 1
@@ -309,7 +309,7 @@ class MsOvba:
         """
         bit_count = MsOvba.ceilLog2(difference)
         length_mask = 0xFFFF >> bit_count
-        offset_mask = ~lengthMask & 0xFFFF
+        offset_mask = ~length_mask & 0xFFFF
         max_length = 0xFFFF << bit_count + 3
         return {
             "lengthMask": length_mask,
