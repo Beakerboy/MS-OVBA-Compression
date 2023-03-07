@@ -114,7 +114,7 @@ class MsOvba:
                     help = MsOvba.copyTokenHelp(len(uncompressed_chunk))
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
-                    copyToken = int.from_bytes(compressedChunk[:2], "little")
+                    copyToken = int.from_bytes(compressed_chunk[:2], "little")
                     copyTokenData = MsOvba.unpackCopyToken(copyToken, help)
                     compressed_chunk = compressed_chunk[2:]
                     offset = copyTokenData["offset"]
