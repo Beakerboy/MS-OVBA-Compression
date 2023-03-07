@@ -108,7 +108,7 @@ class MsOvba:
                     # If the flag bit is one, grab the 2 byte copy token and
                     # determine the offset and length of the replacement
                     # string. There better be 2 bytes or we're in trouble.
-                    if len(compressedChunk) < 2:
+                    if len(compressed_chunk) < 2:
                         message = "Copy Token does not exist."
                         raise Exception(message)
                     help = MsOvba.copyTokenHelp(len(uncompressed_chunk))
