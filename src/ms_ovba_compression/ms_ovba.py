@@ -293,7 +293,7 @@ class MsOvba:
 
         if best_length >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
-            help = MsOvba.copyTokenHelp(difference)
+            help = MsOvba.copytoken_help(difference)
             maximum_length = help["maxLength"]
             length = min(maximum_length, best_length)
             offset = (len(self._activeChunk) - len(self._uncompressedData)
@@ -302,7 +302,7 @@ class MsOvba:
         return offset, length
 
     @staticmethod
-    def copyTokenHelp(difference):
+    def copytoken_help(difference):
         """
         Calculate a lengthMask, offsetMask, and bitCount from the length of the
         uncompressedData.
