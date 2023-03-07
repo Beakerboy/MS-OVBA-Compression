@@ -57,7 +57,7 @@ unpack_copytoken_data = [
 
 @pytest.mark.parametrize("inputs, expected", unpack_copytoken_data)
 def test_unpack_copytoken(inputs, expected):
-    help = MsOvba.copyTokenHelp(inputs[0])
+    help = MsOvba.copytoken_help(inputs[0])
     result = MsOvba.unpack_copytoken(inputs[1], help)
     assert result["length"] == expected[0]
     assert result["offset"] == expected[1]
