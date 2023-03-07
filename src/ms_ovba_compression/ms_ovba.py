@@ -280,14 +280,14 @@ class MsOvba:
         while candidate >= 0:
             c = candidate
             d = len(self._activeChunk) - len(self._uncompressedData)
-            l = 0
+            length = 0
             while (d < len(self._activeChunk)
                    and self._activeChunk[d] == self._activeChunk[c]):
                 c += 1
                 d += 1
-                l += 1
-            if l > best_length:
-                best_length = l
+                length += 1
+            if len > best_length:
+                best_length = length
                 best_candidate = candidate
             candidate -= 1
 
