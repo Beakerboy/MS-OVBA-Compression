@@ -15,7 +15,7 @@ ceil_log2_data = [
 
 @pytest.mark.parametrize("input, expected", ceil_log2_data)
 def test_ceil_log2(input, expected):
-    assert MsOvba.ceilLog2(input) == expected
+    assert MsOvba.ceil_log2(input) == expected
 
 
 pack_copytoken_data = [
