@@ -307,7 +307,7 @@ class MsOvba:
         Calculate a lengthMask, offsetMask, and bitCount from the length of the
         uncompressedData.
         """
-        bit_count = MsOvba.ceilLog2(difference)
+        bit_count = MsOvba.ceil_log2(difference)
         length_mask = 0xFFFF >> bit_count
         offset_mask = ~length_mask & 0xFFFF
         max_length = 0xFFFF << bit_count + 3
@@ -344,7 +344,7 @@ class MsOvba:
         return (temp1 << temp2) | temp3
 
     @staticmethod
-    def ceilLog2(int):
+    def ceil_log2(int):
         i = 4
         while 2 ** i < int:
             i += 1
