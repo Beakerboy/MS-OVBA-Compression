@@ -115,7 +115,7 @@ class MsOvba:
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
                     copytoken = int.from_bytes(compressed_chunk[:2], "little")
-                    copytoken_data = MsOvba.unpackCopyToken(copytoken, help)
+                    copytoken_data = MsOvba.unpack_copytoken(copytoken, help)
                     compressed_chunk = compressed_chunk[2:]
                     offset = copytoken_data["offset"]
 
@@ -251,7 +251,7 @@ class MsOvba:
             # the token little-endian.
             difference = len(self._activeChunk) - len(self._uncompressedData)
             help = MsOvba.copyTokenHelp(difference)
-            token_int = MsOvba.packCopyToken(length, offset, help)
+            token_int = MsOvba.pack_copytoken(length, offset, help)
             packed_token = token_int.to_bytes(2, "little")
 
             # Update the uncompressed buffer by removing the length we were
@@ -319,7 +319,7 @@ class MsOvba:
         }
 
     @staticmethod
-    def unpackCopyToken(copytoken, help):
+    def unpack_copytoken(copytoken, help):
         """
         calculate an offset and length from a 16 bit copytoken
         """
@@ -333,7 +333,7 @@ class MsOvba:
         }
 
     @staticmethod
-    def packCopyToken(length, offset, help):
+    def pack_copytoken(length, offset, help):
         """
         Create the copy token from the length, offset, and currect position
         return bytes
