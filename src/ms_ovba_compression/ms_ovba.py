@@ -3,7 +3,7 @@ class MsOvba:
     def __init__(self, endian='little'):
         self._endian = endian
 
-    def decompress(self, compressedContainer):
+    def decompress(self, compressed_container):
         """
         Decompress a compressed container usng the MS-OVBA Compression
         Algorithm
@@ -12,14 +12,14 @@ class MsOvba:
         :return: Uncompressed data
         :rtype: bytes
         """
-        uncompressedData = b''
+        uncompressed_data = b''
         # The compressed container must begin with the byte \x01
-        if compressedContainer[0] != 0x01:
+        if compressed_container[0] != 0x01:
             message = ("The container signature byte must be \\x01, not "
-                       + str(compressedContainer[0]) + ".")
+                       + str(compressed_container[0]) + ".")
             raise Exception(message)
         # Pop off the signature byte. Everything else is compressed chunks
-        chunks = compressedContainer[1:]
+        chunks = compressed_container[1:]
         while len(chunks) > 0:
             # The first two bytes of each chunk is the header. It will tell us
             # how long the compressed data is in this chunk. All chunks must be
@@ -29,7 +29,7 @@ class MsOvba:
 
             # The unpackHeader method gives us the chunk length. The data
             # portion is two less than that.
-            compressedDataLength = length - 2
+            compressed_data_length = length - 2
 
             # If we have less data then we are supposed to, we have a problem.
             if len(chunks) < length:
@@ -39,19 +39,19 @@ class MsOvba:
                 raise Exception(message)
 
             # Split out the compresseddata from the chunk buffer.
-            compressedChunk = chunks[2:compressedDataLength + 2]
+            compressed_chunk = chunks[2:compressed_data_length + 2]
 
             # Pop off the data we are working on from the buffer
             chunks = chunks[length + 2:]
-            decompressedChunk = self._decompressChunk(compressedChunk)
-            uncompressedData += decompressedChunk
+            decompressed_chunk = self._decompressChunk(compressed_chunk)
+            uncompressed_data += decompressed_chunk
 
             # If the last chunk is less than 4096 bytes, there better not be
             # anything left in the buffer. Should this raise a warning instead?
-            if len(decompressedChunk) < 4096 and len(chunks) > 0:
+            if len(decompressed_chunk) < 4096 and len(chunks) > 0:
                 message = "The provided compressed container is too long."
                 raise Exception(message)
-        return uncompressedData
+        return uncompressed_data
 
     def _unpackHeader(self, compressedHeader):
         # Need to find out if this bit order is endian dependent. It seems the
