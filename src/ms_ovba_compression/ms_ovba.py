@@ -53,20 +53,20 @@ class MsOvba:
                 raise Exception(message)
         return uncompressed_data
 
-    def _unpackHeader(self, compressedHeader):
+    def _unpackHeader(self, compressed_header):
         # Need to find out if this bit order is endian dependent. It seems the
         # real world data had the bits packed little endian and then the
         # resulting two bytes packed little endian into the binary file.
-        intHeader = int.from_bytes(compressedHeader, self._endian)
+        int_header = int.from_bytes(compressed_header, self._endian)
 
         # Data is compressed if the least significat bit is 0b1
-        compressed = (intHeader & 0x8000) >> 15
+        compressed = (int_header & 0x8000) >> 15
 
         # the 12 most significant bits is three less than the chunk size
-        length = (intHeader & 0x0FFF) + 3
+        length = (int_header & 0x0FFF) + 3
         if compressed == 0 and length != 4098:
             raise Exception("If uncompressed, chunk must be 4096 bytes.")
-        signature = (intHeader & 0x7000) >> 12
+        signature = (int_header & 0x7000) >> 12
         if signature != 3:
             message = ("Chunk signature must be three. Value is "
                        + str(signature) + ".")
