@@ -294,8 +294,8 @@ class MsOvba:
         if best_length >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
             help = MsOvba.copyTokenHelp(difference)
-            maximumLength = help["maxLength"]
-            length = min(maximumLength, best_length)
+            maximum_length = help["maxLength"]
+            length = min(maximum_length, best_length)
             offset = (len(self._activeChunk) - len(self._uncompressedData)
                       - best_candidate)
 
