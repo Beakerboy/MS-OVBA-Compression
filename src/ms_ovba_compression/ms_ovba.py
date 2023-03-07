@@ -111,7 +111,7 @@ class MsOvba:
                     if len(compressed_chunk) < 2:
                         message = "Copy Token does not exist."
                         raise Exception(message)
-                    help = MsOvba.copyTokenHelp(len(uncompressed_chunk))
+                    help = MsOvba.copytoken_help(len(uncompressed_chunk))
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
                     copytoken = int.from_bytes(compressed_chunk[:2], "little")
@@ -250,7 +250,7 @@ class MsOvba:
             # Pack the offset and length data into the CopyToken, then pack
             # the token little-endian.
             difference = len(self._activeChunk) - len(self._uncompressedData)
-            help = MsOvba.copyTokenHelp(difference)
+            help = MsOvba.copytoken_help(difference)
             token_int = MsOvba.pack_copytoken(length, offset, help)
             packed_token = token_int.to_bytes(2, "little")
 
