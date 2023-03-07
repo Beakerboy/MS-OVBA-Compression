@@ -286,7 +286,7 @@ class MsOvba:
                 c += 1
                 d += 1
                 length += 1
-            if len > best_length:
+            if length > best_length:
                 best_length = length
                 best_candidate = candidate
             candidate -= 1
