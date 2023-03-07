@@ -18,7 +18,7 @@ def test_ciel_log2(input, expected):
     assert MsOvba.ceilLog2(input) == expected
 
 
-packCopyTokenData = [
+pack_copytoken_data = [
     ([3, 8, 9], 0x7000),
     ([4, 8, 17], 0x3801),
     ([3, 7, 24], 0x3000),
@@ -28,8 +28,8 @@ packCopyTokenData = [
 ]
 
 
-@pytest.mark.parametrize("inputs, expected", packCopyTokenData)
-def test_packCopyToken(inputs, expected):
+@pytest.mark.parametrize("inputs, expected", pack_copytoken_data)
+def test_pack_copytoken(inputs, expected):
     help = MsOvba.copyTokenHelp(inputs[2])
     assert MsOvba.packCopyToken(inputs[0], inputs[1], help) == expected
 
