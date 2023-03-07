@@ -179,7 +179,7 @@ class MsOvba:
         # sequence and compress it and add the compressed sequence to the
         # compressed buffer.
         while len(self._uncompressedData) > 0:
-            compressed_chunk += self._compressTokenSequence()
+            compressed_chunk += self._compress_token_sequence()
 
         # After we are done, we need to ensure the final compressed chunk is
         # not larger than the original to the point that it exceeds 4096 bytes.
@@ -207,7 +207,7 @@ class MsOvba:
         compressed_chunk = header.to_bytes(2, self._endian) + compressed_chunk
         return compressed_chunk
 
-    def _compressTokenSequence(self):
+    def _compress_token_sequence(self):
         """
         A token sequence is a 1 byte token flag followed by 8 tokens. Each
         tokenis one or two bytes. Each bit of the flag byte incates if the
