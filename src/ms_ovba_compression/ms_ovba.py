@@ -216,20 +216,20 @@ class MsOvba:
         stream.
         """
 
-        tokenFlag = 0
+        token_flag = 0
         tokens = b''
         for i in range(8):
             if len(self._uncompressedData) > 0:
-                packedToken, flag = self._compressToken()
+                packed_token, flag = self._compress_token()
 
                 # The flag is a 1 or 0, left shift it and pack it into the flag
                 # byte.
-                tokenFlag = (flag << i) | tokenFlag
-                tokens += packedToken
-        tokenSequence = tokenFlag.to_bytes(1, "little") + tokens
-        return tokenSequence
+                token_flag = (flag << i) | token_flag
+                tokens += packed_token
+        token_sequence = token_flag.to_bytes(1, "little") + tokens
+        return token_sequence
 
-    def _compressToken(self):
+    def _compress_token(self):
         """
         Given a sequence of uncompressed data, return a single compressed
         token. Tokens are either one byte representing the value of the
