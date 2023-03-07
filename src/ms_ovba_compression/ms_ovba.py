@@ -167,7 +167,7 @@ class MsOvba:
         # Is endian-ness supposed to affect the header organization?
         # The docs state 12 length bits + 0b011 + compression-bit but real
         # world little endian file has compression-bit + 0b011 + 12 length bits
-        compressAndSig = 0xB000
+        compress_and_sig = 0xB000
 
         # Buffer of data to be compressed and moved to compressedChunk
         self._uncompressedData = data
@@ -188,19 +188,19 @@ class MsOvba:
         # compression but to 0.
         # This chunk size is three less then the "total" chunk size, which is
         # data plus the two byte header.
-        chunkSizeMinusThree = len(compressed_chunk) - 1
+        chunksize_minus_three = len(compressed_chunk) - 1
 
-        if chunkSizeMinusThree > 4095:
-            chunkSizeMinusThree = 4095
+        if chunksize_minus_three > 4095:
+            chunksize_minus_three = 4095
             # Raw chunks must be 4096 bytes in size. Even if the starting data
             # is less than 4096 bytes. This means after decompressing, there
             # may be unexpected padding.
             compressed_chunk = data.ljust(4096, b'\x00')
-            compressAndSig = 0x3000
+            compress_and_sig = 0x3000
 
         # Join the 12 bit chunk size with the compress bit and three bit
         # siganture.
-        header = compressAndSig | chunkSizeMinusThree
+        header = compress_and_sig | chunksize_minus_three
 
         # Prepend the header to the compressed chunk data and return the
         # complete chunk.
