@@ -14,7 +14,7 @@ ceil_log2_data = [
 
 
 @pytest.mark.parametrize("input, expected", ceil_log2_data)
-def test_ciel_log2(input, expected):
+def test_ceil_log2(input, expected):
     assert MsOvba.ceilLog2(input) == expected
 
 
