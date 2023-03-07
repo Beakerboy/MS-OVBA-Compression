@@ -274,8 +274,8 @@ class MsOvba:
         """
         offset = 0
         length = 0
-        bestLength = 0
-        bestCandidate = 0
+        best_length = 0
+        best_candidate = 0
         candidate = len(self._activeChunk) - len(self._uncompressedData) - 1
         while candidate >= 0:
             C = candidate
@@ -287,17 +287,17 @@ class MsOvba:
                 D += 1
                 L += 1
             if L > bestLength:
-                bestLength = L
-                bestCandidate = candidate
+                best_length = L
+                best_candidate = candidate
             candidate -= 1
 
-        if bestLength >= 3:
+        if best_length >= 3:
             difference = len(self._activeChunk) - len(self._uncompressedData)
             help = MsOvba.copyTokenHelp(difference)
             maximumLength = help["maxLength"]
-            length = min(maximumLength, bestLength)
+            length = min(maximumLength, best_length)
             offset = (len(self._activeChunk) - len(self._uncompressedData)
-                      - bestCandidate)
+                      - best_candidate)
 
         return offset, length
 
@@ -307,24 +307,24 @@ class MsOvba:
         Calculate a lengthMask, offsetMask, and bitCount from the length of the
         uncompressedData.
         """
-        bitCount = MsOvba.ceilLog2(difference)
-        lengthMask = 0xFFFF >> bitCount
-        offsetMask = ~lengthMask & 0xFFFF
-        maxLength = 0xFFFF << bitCount + 3
+        bit_count = MsOvba.ceilLog2(difference)
+        length_mask = 0xFFFF >> bit_count
+        offset_mask = ~lengthMask & 0xFFFF
+        max_length = 0xFFFF << bit_count + 3
         return {
-            "lengthMask": lengthMask,
-            "offsetMask": offsetMask,
-            "bitCount": bitCount,
-            "maxLength": maxLength
+            "lengthMask": length_mask,
+            "offsetMask": offset_mask,
+            "bitCount": bit_count,
+            "maxLength": max_length
         }
 
     @staticmethod
-    def unpackCopyToken(copyToken, help):
+    def unpackCopyToken(copytoken, help):
         """
         calculate an offset and length from a 16 bit copytoken
         """
-        length = (copyToken & help["lengthMask"]) + 3
-        temp1 = copyToken & help["offsetMask"]
+        length = (copytoken & help["lengthMask"]) + 3
+        temp1 = copytoken & help["offsetMask"]
         temp2 = 16 - help["bitCount"]
         offset = (temp1 >> temp2) + 1
         return {
