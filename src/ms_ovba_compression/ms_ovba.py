@@ -25,7 +25,7 @@ class MsOvba:
             # how long the compressed data is in this chunk. All chunks must be
             # 4096 bytes uncompressed except for the last chunk.
             header = chunks[0:2]
-            compressed, length = self._unpackHeader(header)
+            compressed, length = self._unpack_header(header)
 
             # The unpackHeader method gives us the chunk length. The data
             # portion is two less than that.
@@ -43,7 +43,7 @@ class MsOvba:
 
             # Pop off the data we are working on from the buffer
             chunks = chunks[length + 2:]
-            decompressed_chunk = self._decompressChunk(compressed_chunk)
+            decompressed_chunk = self._decompress_chunk(compressed_chunk)
             uncompressed_data += decompressed_chunk
 
             # If the last chunk is less than 4096 bytes, there better not be
@@ -53,7 +53,7 @@ class MsOvba:
                 raise Exception(message)
         return uncompressed_data
 
-    def _unpackHeader(self, compressed_header):
+    def _unpack_header(self, compressed_header):
         # Need to find out if this bit order is endian dependent. It seems the
         # real world data had the bits packed little endian and then the
         # resulting two bytes packed little endian into the binary file.
@@ -73,7 +73,7 @@ class MsOvba:
             raise Exception(message)
         return compressed, length
 
-    def _decompressChunk(self, compressedChunk):
+    def _decompress_chunk(self, compressed_chunk) -> bytes:
         """
         Decompress bytes object
 
@@ -81,14 +81,14 @@ class MsOvba:
         :return: bytes
         :rtype: bytes
         """
-        uncompressedChunk = b''
-        while len(compressedChunk) > 0:
+        uncompressed_chunk = b''
+        while len(compressed_chunk) > 0:
             # The Flag Byte is one byte. pop it off
-            flagByte = compressedChunk[0]
-            compressedChunk = compressedChunk[1:]
+            flagByte = compressed_chunk[0]
+            compressed_chunk = compressed_chunk[1:]
 
             # If we have a flag byte, we better have data to go with it.
-            if len(compressedChunk) == 0:
+            if len(compressed_chunk) == 0:
                 message = ("There must be at least one token "
                            "in each TokenSequence.")
                 raise Exception(message)
@@ -100,10 +100,10 @@ class MsOvba:
                 if flagBit == 0:
                     # If the flag bit is zero, no compression ocurred, so just
                     # move the byte over.
-                    if len(compressedChunk) > 0:
-                        byte = compressedChunk[0].to_bytes(1, "little")
-                        uncompressedChunk += byte
-                        compressedChunk = compressedChunk[1:]
+                    if len(compressed_chunk) > 0:
+                        byte = compressed_chunk[0].to_bytes(1, "little")
+                        uncompressed_chunk += byte
+                        compressed_chunk = compressed_chunk[1:]
                 else:
                     # If the flag bit is one, grab the 2 byte copy token and
                     # determine the offset and length of the replacement
@@ -111,12 +111,12 @@ class MsOvba:
                     if len(compressedChunk) < 2:
                         message = "Copy Token does not exist."
                         raise Exception(message)
-                    help = MsOvba.copyTokenHelp(len(uncompressedChunk))
+                    help = MsOvba.copyTokenHelp(len(uncompressed_chunk))
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
                     copyToken = int.from_bytes(compressedChunk[:2], "little")
                     copyTokenData = MsOvba.unpackCopyToken(copyToken, help)
-                    compressedChunk = compressedChunk[2:]
+                    compressed_chunk = compressed_chunk[2:]
                     offset = copyTokenData["offset"]
 
                     # Copy data from the uncompressed chunk, {offset} bytes
@@ -124,14 +124,14 @@ class MsOvba:
                     # that we could possibly copy new data multiple times, ie.
                     # offset 1 length 7
                     for i in range(copyTokenData["length"]):
-                        copyInt = uncompressedChunk[-1 * offset]
+                        copyInt = uncompressed_chunk[-1 * offset]
                         copyByte = copyInt.to_bytes(1, "little")
-                        uncompressedChunk += copyByte
+                        uncompressed_chunk += copyByte
                 # Move the mask for the next round
                 flagMask = flagMask << 1
-        return uncompressedChunk
+        return uncompressed_chunk
 
-    def compress(self, data):
+    def compress(self, data) -> bytes:
         """
         Compress a bytearray
         :param data bytes: bytes of compressed data
@@ -139,21 +139,21 @@ class MsOvba:
         :rtype: bytes
         """
         # The compressed container begins with a sgnature byte.
-        compressedContainer = b'\x01'
+        compressed_container = b'\x01'
 
         # Each chunk must hold 4096 bytes of data except the final chunk.
-        numberOfChunks = (len(data) - 1) // 4096 + 1
+        number_of_chunks = (len(data) - 1) // 4096 + 1
 
         # Grab 4096 bytes, compress the chunk, and add it to the container
-        for i in range(numberOfChunks):
+        for i in range(number_of_chunks):
             start = i * 4096
             end = (i + 1) * 4096
-            compressedChunk = self._compressChunk(data[start: end])
-            compressedContainer += compressedChunk
+            compressed_chunk = self._compress_chunk(data[start: end])
+            compressed_container += compressed_chunk
 
-        return compressedContainer
+        return compressed_container
 
-    def _compressChunk(self, data):
+    def _compress_chunk(self, data):
         """
         A chunk of data is 4096 bytes or less. This will return a stream of max
         length 4098, a 2 byte header and up to 4096 bytes of data.
