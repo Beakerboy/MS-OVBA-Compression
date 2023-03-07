@@ -173,13 +173,13 @@ class MsOvba:
         self._uncompressedData = data
 
         # Buffer of compressed data.
-        compressedChunk = b''
+        compressed_chunk = b''
 
         # While there is data in the uncompressed buffer, build a token
         # sequence and compress it and add the compressed sequence to the
         # compressed buffer.
         while len(self._uncompressedData) > 0:
-            compressedChunk += self._compressTokenSequence()
+            compressed_chunk += self._compressTokenSequence()
 
         # After we are done, we need to ensure the final compressed chunk is
         # not larger than the original to the point that it exceeds 4096 bytes.
@@ -188,14 +188,14 @@ class MsOvba:
         # compression but to 0.
         # This chunk size is three less then the "total" chunk size, which is
         # data plus the two byte header.
-        chunkSizeMinusThree = len(compressedChunk) - 1
+        chunkSizeMinusThree = len(compressed_chunk) - 1
 
         if chunkSizeMinusThree > 4095:
             chunkSizeMinusThree = 4095
             # Raw chunks must be 4096 bytes in size. Even if the starting data
             # is less than 4096 bytes. This means after decompressing, there
             # may be unexpected padding.
-            compressedChunk = data.ljust(4096, b'\x00')
+            compressed_chunk = data.ljust(4096, b'\x00')
             compressAndSig = 0x3000
 
         # Join the 12 bit chunk size with the compress bit and three bit
@@ -204,8 +204,8 @@ class MsOvba:
 
         # Prepend the header to the compressed chunk data and return the
         # complete chunk.
-        compressedChunk = header.to_bytes(2, self._endian) + compressedChunk
-        return compressedChunk
+        compressed_chunk = header.to_bytes(2, self._endian) + compressed_chunk
+        return compressed_chunk
 
     def _compressTokenSequence(self):
         """
@@ -241,29 +241,29 @@ class MsOvba:
         :return: (packed copy token, flag bit)
         :rtype: (bytes, int)
         """
-        packedToken = b''
-        tokenFlag = 0
+        packed_token = b''
+        token_flag = 0
         offset, length = self._matching()
         if offset > 0:
-            tokenFlag = 1
+            token_flag = 1
 
             # Pack the offset and length data into the CopyToken, then pack
             # the token little-endian.
             difference = len(self._activeChunk) - len(self._uncompressedData)
             help = MsOvba.copyTokenHelp(difference)
-            tokenInt = MsOvba.packCopyToken(length, offset, help)
-            packedToken = tokenInt.to_bytes(2, "little")
+            token_int = MsOvba.packCopyToken(length, offset, help)
+            packed_token = token_int.to_bytes(2, "little")
 
             # Update the uncompressed buffer by removing the length we were
             # able to match.
             self._uncompressedData = self._uncompressedData[length:]
         else:
-            tokenFlag = 0
+            token_flag = 0
 
             # No matching data was found, copy the literal token over.
-            packedToken = self._uncompressedData[0].to_bytes(1, "little")
+            packed_token = self._uncompressedData[0].to_bytes(1, "little")
             self._uncompressedData = self._uncompressedData[1:]
-        return packedToken, tokenFlag
+        return packed_token, token_flag
 
     def _matching(self):
         """
