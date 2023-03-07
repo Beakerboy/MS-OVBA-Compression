@@ -84,7 +84,7 @@ class MsOvba:
         uncompressed_chunk = b''
         while len(compressed_chunk) > 0:
             # The Flag Byte is one byte. pop it off
-            flagByte = compressed_chunk[0]
+            flag_byte = compressed_chunk[0]
             compressed_chunk = compressed_chunk[1:]
 
             # If we have a flag byte, we better have data to go with it.
@@ -92,12 +92,12 @@ class MsOvba:
                 message = ("There must be at least one token "
                            "in each TokenSequence.")
                 raise Exception(message)
-            flagMask = 1
+            flag_mask = 1
             for i in range(8):
                 # Extract Flag bit from the token with the mask
-                flagBit = flagByte & flagMask
+                flag_bit = flag_byte & flag_mask
 
-                if flagBit == 0:
+                if flag_bit == 0:
                     # If the flag bit is zero, no compression ocurred, so just
                     # move the byte over.
                     if len(compressed_chunk) > 0:
@@ -114,21 +114,21 @@ class MsOvba:
                     help = MsOvba.copyTokenHelp(len(uncompressed_chunk))
                     # The copy Token is always packed into the compressed chuck
                     # little endian.
-                    copyToken = int.from_bytes(compressed_chunk[:2], "little")
-                    copyTokenData = MsOvba.unpackCopyToken(copyToken, help)
+                    copytoken = int.from_bytes(compressed_chunk[:2], "little")
+                    copytoken_data = MsOvba.unpackCopyToken(copytoken, help)
                     compressed_chunk = compressed_chunk[2:]
-                    offset = copyTokenData["offset"]
+                    offset = copytoken_data["offset"]
 
                     # Copy data from the uncompressed chunk, {offset} bytes
                     # away, {length} number of times. Note that this can mean
                     # that we could possibly copy new data multiple times, ie.
                     # offset 1 length 7
-                    for i in range(copyTokenData["length"]):
-                        copyInt = uncompressed_chunk[-1 * offset]
-                        copyByte = copyInt.to_bytes(1, "little")
-                        uncompressed_chunk += copyByte
+                    for i in range(copytoken_data["length"]):
+                        copy_int = uncompressed_chunk[-1 * offset]
+                        copy_byte = copy_int.to_bytes(1, "little")
+                        uncompressed_chunk += copy_byte
                 # Move the mask for the next round
-                flagMask = flagMask << 1
+                flag_mask = flag_mask << 1
         return uncompressed_chunk
 
     def compress(self, data) -> bytes:
