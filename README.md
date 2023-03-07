@@ -29,7 +29,7 @@ from ms_ovba_compression.ms_ovba import MsOvba
 
 # returns b'\x01\x19°\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
-ms_ovba = MsOVBA()
+ms_ovba = MsOvba()
 ms_ovba.compress(input)
 
 # returns b'#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa'
@@ -38,13 +38,9 @@ compressed = b'\x01/°\x00#aaabcde²f\x00paghij\x018\x08akl\x000mnop\x06q\x02p\x
 ms_ovba.decompress(compressed)
 
 ```
-The objects can be initialized to indicate the endianness if the default little-endian is not desired. However, having never seen real world big-endian packed data
-means this feature is untested.
+The objects can be initialized to indicate the endianness if the default little-endian is not desired.
 ```python
-# unsure if it should return:
-# b'\x01°\x19\x00abcdefgh\x00ijklmnop\x00qrstuv.'
-# or
-# b'\x01\x01—\x00abcdefgh\x00ijklmnop\x00qrstuv.'
+# returns b'\x01°\x19\x00abcdefgh\x00ijklmnop\x00qrstuv.'
 input = b'abcdefghijklmnopqrstuv.'
 ms_ovba = MsOvba("big")
 ms_ovba.compress(input)

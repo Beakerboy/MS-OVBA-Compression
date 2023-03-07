@@ -1,7 +1,7 @@
 from ms_ovba_compression.ms_ovba import MsOvba
 
 
-def test_unableToCompress():
+def test_unable_to_compress():
     input = b'abcdefghijklmnopqrstuv.'
     ms_ovba = MsOvba()
     expected = (b'\x01\x19\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
@@ -9,7 +9,7 @@ def test_unableToCompress():
     assert ms_ovba.compress(input) == expected
 
 
-def test_maxCompression():
+def test_max_compression():
     input = (b'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
              + b'aaaaaaaaaa')
     ms_ovba = MsOvba()
@@ -17,7 +17,7 @@ def test_maxCompression():
     assert ms_ovba.compress(input) == expected
 
 
-def test_longPoorCompression():
+def test_long_poor_compression():
     """
     Every sequence of 8 bytes has a flag byte prepended to the compressed token
     sequence. In theory a 3640 byte sequence could "compress" to be larger than
@@ -38,3 +38,11 @@ def test_longPoorCompression():
     assert len(result) == 4099
     # The resulting chunk header will be 0x3FFF
     assert result[2] & 0xF0 == 0x30
+
+
+def test_unable_to_compress_big():
+    input = b'abcdefghijklmnopqrstuv.'
+    ms_ovba = MsOvba("big")
+    expected = (b'\x01\xB0\x19\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
+                + b'\x6B\x6C\x6D\x6E\x6F\x70\x00\x71\x72\x73\x74\x75\x76\x2E')
+    assert ms_ovba.compress(input) == expected
