@@ -2,7 +2,7 @@ import pytest
 from ms_ovba_compression.ms_ovba import MsOvba
 
 
-def test_normalCompression():
+def test_normal_compression():
     ms_ovba = MsOvba()
     expected = b"#aaabcdefaaaaghijaaaaaklaaamnopqaaaaaaaaaaaarstuvwxyzaaa"
     compressed = (b'\x01\x2F\xB0\x00\x23\x61\x61\x61\x62\x63\x64\x65\x82\x66'
@@ -12,7 +12,7 @@ def test_normalCompression():
     assert ms_ovba.decompress(compressed) == expected
 
 
-def test_badSignatureByte():
+def test_bad_signature_byte():
     """
     The container must have a signature byte
     """
@@ -25,7 +25,7 @@ def test_badSignatureByte():
         ms_ovba.decompress(compressed)
 
 
-def test_containerTooShort():
+def test_container_too_short():
     """
     The container cannot be shorter then specified by the header
     """
@@ -38,7 +38,7 @@ def test_containerTooShort():
         ms_ovba.decompress(compressed)
 
 
-def test_containerTooLong():
+def test_container_too_long():
     """
     The container must not be longer then specified in the header
     """
@@ -51,7 +51,7 @@ def test_containerTooLong():
         ms_ovba.decompress(compressed)
 
 
-def test_badRawChunkHeader():
+def test_bad_raw_chunk_header():
     """
     Raw chunks must have 4096 bytes of data. Header = 0x3FFF
     """
@@ -64,7 +64,7 @@ def test_badRawChunkHeader():
         ms_ovba.decompress(compressed)
 
 
-def test_flagWithNoData():
+def test_flag_with_no_data():
     """
     If a flag byte is present, there must be data after it.
     """
@@ -77,7 +77,7 @@ def test_flagWithNoData():
         ms_ovba.decompress(compressed)
 
 
-def test_badHeaderSignature():
+def test_bad_header_signature():
     """
     The header signature must be 0b011
     """
@@ -90,7 +90,7 @@ def test_badHeaderSignature():
         ms_ovba.decompress(compressed)
 
 
-def test_incompleteCopyToken():
+def test_incomplete_copytoken():
     """
     A copy token must be two bytes. test for early termination
     """
@@ -103,7 +103,7 @@ def test_incompleteCopyToken():
         ms_ovba.decompress(compressed)
 
 
-def test_decompressUnableToCompressBig():
+def test_decompress_unable_to_compress_big():
     expected = b'abcdefghijklmnopqrstuv.'
     ms_ovba = MsOvba("big")
     input = (b'\x01\xB0\x19\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
