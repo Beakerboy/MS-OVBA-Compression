@@ -30,7 +30,7 @@ pack_copytoken_data = [
 
 @pytest.mark.parametrize("inputs, expected", pack_copytoken_data)
 def test_pack_copytoken(inputs, expected):
-    help = MsOvba.copyTokenHelp(inputs[2])
+    help = MsOvba.copytoken_help(inputs[2])
     assert MsOvba.pack_copytoken(inputs[0], inputs[1], help) == expected
 
 
@@ -42,7 +42,7 @@ copytoken_help_data = [
 
 @pytest.mark.parametrize("input, expected", copytoken_help_data)
 def test_copytoken_help(input, expected):
-    result = MsOvba.copyTokenHelp(input)
+    result = MsOvba.copytoken_help(input)
     assert result["bitCount"] == expected[0]
     assert result["lengthMask"] == expected[1]
     assert result["offsetMask"] == expected[2]
