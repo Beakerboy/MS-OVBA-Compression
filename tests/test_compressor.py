@@ -1,7 +1,7 @@
 from ms_ovba_compression.ms_ovba import MsOvba
 
 
-def test_unable_to_compress():
+def test_unable_to_compress() -> None:
     input = b'abcdefghijklmnopqrstuv.'
     ms_ovba = MsOvba()
     expected = (b'\x01\x19\xB0\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
@@ -9,7 +9,7 @@ def test_unable_to_compress():
     assert ms_ovba.compress(input) == expected
 
 
-def test_max_compression():
+def test_max_compression() -> None:
     input = (b'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
              + b'aaaaaaaaaa')
     ms_ovba = MsOvba()
@@ -17,7 +17,7 @@ def test_max_compression():
     assert ms_ovba.compress(input) == expected
 
 
-def test_long_poor_compression():
+def test_long_poor_compression() -> None:
     """
     Every sequence of 8 bytes has a flag byte prepended to the compressed token
     sequence. In theory a 3640 byte sequence could "compress" to be larger than
@@ -40,7 +40,7 @@ def test_long_poor_compression():
     assert result[2] & 0xF0 == 0x30
 
 
-def test_unable_to_compress_big():
+def test_unable_to_compress_big() -> None:
     input = b'abcdefghijklmnopqrstuv.'
     ms_ovba = MsOvba("big")
     expected = (b'\x01\xB0\x19\x00\x61\x62\x63\x64\x65\x66\x67\x68\x00\x69\x6A'
