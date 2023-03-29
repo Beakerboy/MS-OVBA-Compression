@@ -59,7 +59,7 @@ class MsOvba:
                 raise Exception(message)
         return uncompressed_data
 
-    def _unpack_header(self: T, compressed_header):
+    def _unpack_header(self: T, compressed_header: bytes) -> tuple:
         # Need to find out if this bit order is endian dependent. It seems the
         # real world data had the bits packed little endian and then the
         # resulting two bytes packed little endian into the binary file.
@@ -137,7 +137,7 @@ class MsOvba:
                 flag_mask = flag_mask << 1
         return uncompressed_chunk
 
-    def compress(self: T, data) -> bytes:
+    def compress(self: T, data: bytes) -> bytes:
         """
         Compress a bytearray
         :param data bytes: bytes of compressed data
@@ -159,7 +159,7 @@ class MsOvba:
 
         return compressed_container
 
-    def _compress_chunk(self: T, data):
+    def _compress_chunk(self: T, data: bytes) -> bytes:
         """
         A chunk of data is 4096 bytes or less. This will return a stream of max
         length 4098, a 2 byte header and up to 4096 bytes of data.
@@ -213,7 +213,7 @@ class MsOvba:
         compressed_chunk = header.to_bytes(2, self._endian) + compressed_chunk
         return compressed_chunk
 
-    def _compress_token_sequence(self: T):
+    def _compress_token_sequence(self: T) -> bytes:
         """
         A token sequence is a 1 byte token flag followed by 8 tokens. Each
         tokenis one or two bytes. Each bit of the flag byte incates if the
@@ -235,7 +235,7 @@ class MsOvba:
         token_sequence = token_flag.to_bytes(1, "little") + tokens
         return token_sequence
 
-    def _compress_token(self: T):
+    def _compress_token(self: T) -> tuple:
         """
         Given a sequence of uncompressed data, return a single compressed
         token. Tokens are either one byte representing the value of the
@@ -271,7 +271,7 @@ class MsOvba:
             self._uncompressedData = self._uncompressedData[1:]
         return packed_token, token_flag
 
-    def _matching(self: T):
+    def _matching(self: T) -> tuple:
         """
         Work backwards through the uncompressed data that has already been
         compressed to find the longest series of matching bytes.
@@ -308,7 +308,7 @@ class MsOvba:
         return offset, length
 
     @staticmethod
-    def copytoken_help(difference):
+    def copytoken_help(difference: int) -> dict:
         """
         Calculate a lengthMask, offsetMask, and bitCount from the length of the
         uncompressedData.
@@ -325,7 +325,7 @@ class MsOvba:
         }
 
     @staticmethod
-    def unpack_copytoken(copytoken, help):
+    def unpack_copytoken(copytoken, help: dict) -> dict:
         """
         calculate an offset and length from a 16 bit copytoken
         """
