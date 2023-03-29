@@ -14,7 +14,7 @@ ceil_log2_data = [
 
 
 @pytest.mark.parametrize("input, expected", ceil_log2_data)
-def test_ceil_log2(input, expected):
+def test_ceil_log2(input: int, expected: int) -> None:
     assert MsOvba.ceil_log2(input) == expected
 
 
@@ -29,7 +29,7 @@ pack_copytoken_data = [
 
 
 @pytest.mark.parametrize("inputs, expected", pack_copytoken_data)
-def test_pack_copytoken(inputs, expected):
+def test_pack_copytoken(inputs: list, expected: int) -> None:
     help = MsOvba.copytoken_help(inputs[2])
     assert MsOvba.pack_copytoken(inputs[0], inputs[1], help) == expected
 
@@ -41,7 +41,7 @@ copytoken_help_data = [
 
 
 @pytest.mark.parametrize("input, expected", copytoken_help_data)
-def test_copytoken_help(input, expected):
+def test_copytoken_help(input: int, expected: list) -> None:
     result = MsOvba.copytoken_help(input)
     assert result["bitCount"] == expected[0]
     assert result["lengthMask"] == expected[1]
@@ -56,7 +56,7 @@ unpack_copytoken_data = [
 
 
 @pytest.mark.parametrize("inputs, expected", unpack_copytoken_data)
-def test_unpack_copytoken(inputs, expected):
+def test_unpack_copytoken(inputs: list, expected: list) -> None:
     help = MsOvba.copytoken_help(inputs[0])
     result = MsOvba.unpack_copytoken(inputs[1], help)
     assert result["length"] == expected[0]
