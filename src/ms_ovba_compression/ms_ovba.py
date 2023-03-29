@@ -6,7 +6,7 @@ T = TypeVar('T', bound='MsOvba')
 
 class MsOvba:
 
-    def __init__(self: T, endian: str ='little'):
+    def __init__(self: T, endian: str = 'little') -> None:
         self._endian = endian
 
     def decompress(self: T, compressed_container: bytes) -> bytes:
@@ -325,7 +325,7 @@ class MsOvba:
         }
 
     @staticmethod
-    def unpack_copytoken(copytoken, help: dict) -> dict:
+    def unpack_copytoken(copytoken: int, help: dict) -> dict:
         """
         calculate an offset and length from a 16 bit copytoken
         """
