@@ -339,7 +339,7 @@ class MsOvba:
         }
 
     @staticmethod
-    def pack_copytoken(length, offset, help):
+    def pack_copytoken(length: int, offset: int, help: dict) -> int:
         """
         Create the copy token from the length, offset, and currect position
         return bytes
@@ -350,7 +350,7 @@ class MsOvba:
         return (temp1 << temp2) | temp3
 
     @staticmethod
-    def ceil_log2(int: int):
+    def ceil_log2(int: int) -> int:
         i = 4
         while 2 ** i < int:
             i += 1
