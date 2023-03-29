@@ -1,9 +1,15 @@
+from typing import TypeVar
+
+
+T = TypeVar('T', bound='MsOvba')
+
+
 class MsOvba:
 
-    def __init__(self, endian='little'):
+    def __init__(self: T, endian: str ='little'):
         self._endian = endian
 
-    def decompress(self, compressed_container):
+    def decompress(self: T, compressed_container: bytes) -> bytes:
         """
         Decompress a compressed container usng the MS-OVBA Compression
         Algorithm
@@ -53,7 +59,7 @@ class MsOvba:
                 raise Exception(message)
         return uncompressed_data
 
-    def _unpack_header(self, compressed_header):
+    def _unpack_header(self: T, compressed_header):
         # Need to find out if this bit order is endian dependent. It seems the
         # real world data had the bits packed little endian and then the
         # resulting two bytes packed little endian into the binary file.
@@ -73,7 +79,7 @@ class MsOvba:
             raise Exception(message)
         return compressed, length
 
-    def _decompress_chunk(self, compressed_chunk) -> bytes:
+    def _decompress_chunk(self: T, compressed_chunk: bytes) -> bytes:
         """
         Decompress bytes object
 
@@ -131,7 +137,7 @@ class MsOvba:
                 flag_mask = flag_mask << 1
         return uncompressed_chunk
 
-    def compress(self, data) -> bytes:
+    def compress(self: T, data) -> bytes:
         """
         Compress a bytearray
         :param data bytes: bytes of compressed data
@@ -153,7 +159,7 @@ class MsOvba:
 
         return compressed_container
 
-    def _compress_chunk(self, data):
+    def _compress_chunk(self: T, data):
         """
         A chunk of data is 4096 bytes or less. This will return a stream of max
         length 4098, a 2 byte header and up to 4096 bytes of data.
@@ -207,7 +213,7 @@ class MsOvba:
         compressed_chunk = header.to_bytes(2, self._endian) + compressed_chunk
         return compressed_chunk
 
-    def _compress_token_sequence(self):
+    def _compress_token_sequence(self: T):
         """
         A token sequence is a 1 byte token flag followed by 8 tokens. Each
         tokenis one or two bytes. Each bit of the flag byte incates if the
@@ -229,7 +235,7 @@ class MsOvba:
         token_sequence = token_flag.to_bytes(1, "little") + tokens
         return token_sequence
 
-    def _compress_token(self):
+    def _compress_token(self: T):
         """
         Given a sequence of uncompressed data, return a single compressed
         token. Tokens are either one byte representing the value of the
@@ -265,7 +271,7 @@ class MsOvba:
             self._uncompressedData = self._uncompressedData[1:]
         return packed_token, token_flag
 
-    def _matching(self):
+    def _matching(self: T):
         """
         Work backwards through the uncompressed data that has already been
         compressed to find the longest series of matching bytes.
@@ -344,7 +350,7 @@ class MsOvba:
         return (temp1 << temp2) | temp3
 
     @staticmethod
-    def ceil_log2(int):
+    def ceil_log2(int: int):
         i = 4
         while 2 ** i < int:
             i += 1
