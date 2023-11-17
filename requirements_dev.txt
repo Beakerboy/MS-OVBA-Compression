@@ -1,5 +1,0 @@
-pytest
-pytest-cov
-coveralls
-pep8-naming
-flake8-annotations
