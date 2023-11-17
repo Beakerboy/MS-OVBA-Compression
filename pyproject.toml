@@ -16,7 +16,14 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-
+[project.optional-dependencies]
+tests = [
+  'pytest',
+  'pytest-cov',
+  'coveralls',
+  'pep8-naming',
+  'flake8-annotations'
+]
 [project.urls]
 "Homepage" = "https://github.com/Beakerboy/MS-OVBA-Compression"
 "Bug Tracker" = "https://github.com/Beakerboy/MS-OVBA-Compression/issues"
