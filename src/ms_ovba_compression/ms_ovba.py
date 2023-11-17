@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 
 T = TypeVar('T', bound='MsOvba')
@@ -6,7 +6,7 @@ T = TypeVar('T', bound='MsOvba')
 
 class MsOvba:
 
-    def __init__(self: T, endian: str = 'little') -> None:
+    def __init__(self: T, endian: Literal['little', 'big'] = 'little') -> None:
         self._endian = endian
 
     def decompress(self: T, compressed_container: bytes) -> bytes:
