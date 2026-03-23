@@ -29,6 +29,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install -e .[tests]
         stubgen src/ms_ovba_compression -o src/ms_ovba_compression
         pip install build
     - name: Build package
